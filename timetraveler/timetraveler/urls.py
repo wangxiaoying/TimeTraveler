@@ -13,6 +13,11 @@ user_patterns = patterns('user.views',
 	url(r'^user/register$', 'register'),
 )
 
+event_patterns = patterns('event.views',
+	url(r'^event/myspace$', 'myspace'),
+	url(r'^event/create$', 'createEvent'),
+)
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -21,4 +26,4 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': MEDIA_ROOT }),
-)+user_patterns
+)+user_patterns+event_patterns

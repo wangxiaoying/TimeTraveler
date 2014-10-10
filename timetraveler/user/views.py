@@ -19,7 +19,7 @@ def index(request):
 	if request.user.is_authenticated():
 		return render_to_response('login.html')
 	else:
-		return render_to_response('login.html')
+		return HttpResponseRedirect('/event/myspace')
 
 @csrf_exempt
 def login(request):
@@ -34,7 +34,7 @@ def login(request):
 			if user.is_superuser is True:
 				return HttpResponseRedirect('/user/admin')
 			else:
-				return HttpResponseRedirect('/user/homepage')
+				return HttpResponseRedirect('/event/myspace')
 		else:
 			return render_to_response('message.html', 
 				{

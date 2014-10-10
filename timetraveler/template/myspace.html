@@ -13,7 +13,7 @@
 			<div class="navbar-header">
 				<a class="navbar-brand" href="/user/homepage">TimeTraveler</a>
 			</div>
-			<ul class="nav navbar-nav">
+			<!-- <ul class="nav navbar-nav">
 				<li><a href="#">我的相册</li>
 				<li><a href="#">时间囊</li>
 			</ul>
@@ -26,7 +26,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="#">通知</a></li>
 				<li><a href="/user/profile">{{ user.username }}</a></li>
-			</ul>
+			</ul> -->
 		</div>
 	</nav>
 
@@ -49,14 +49,33 @@
 				{% csrf_token %}
 				<h5>发布新状态</h5>
 				<div class="form-group">
-					<textarea class="form-control" rows="3"></textarea>
+					<textarea name="text" class="form-control" rows="3" placeholder="我的新鲜事~" require="true"></textarea>
 				</div>
 				<div class="form-group">
-					
+					<input type="file" name="images">
 				</div>
-					
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-primary">发布</button></br>
 				</div>
 			</form>
+
+			{% if events %}
+			<ul>
+				{% for event in events %}
+				<li>
+					<div>
+						<h4>{{ event.user.username }}</h4>
+						<h5>{{ event.text }}</h5>
+						<a href="/media/{{ event.image_1.url }}">{{ event.image_1.name }}</a>
+						<img data-src="/media/{{ event.image_1.url}}" alt="..."/>
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+			{% else %}
+			<h3>没有任何新鲜事</h3>
+			{% endif %}
+
 		</div>
 	</div>
 
