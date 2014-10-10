@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>TimeTraveler</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="/media/resources/css/login.css">
+	<script type="text/javascript" src="/media/resources/js/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="/media/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/media/resources/js/register.js"></script>
+</head>
+<body>
+	<div class="container row col-md-4 col-md-offset-4">
+		<form role="form" class="form-login" action="/user/register" method="POST" onsubmit="return validate_password()">
+			<h2>Time Traveler</h2>
+			<div class="form-group">
+				<input name="username" type="text" class="form-control" id="registerInputUsername" placeholder="用户名" required="true">
+			</div>
+			<div class="form-group">
+				<input name="email" type="email" class="form-control" id="registerInputEmail" placeholder="邮箱" required="true">
+			</div>
+			<div class="form-group">
+				<input name="password" type="password" class="form-control" id="registerInputPassword" placeholder="密码" required="true">
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" id="registerInputPasswordConfirm" placeholder="确认密码" required="true" data-toggle="popover" data-content="密码必须一致" data-placement="bottom">
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-default btn-primary btn-block">注册</button></br>
+			</div>
+			<p class="text-center"><a href="/user/index">登录</a></p>
+		</form>
+	</div>
+</body>
+</html>

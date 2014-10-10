@@ -1,0 +1,17 @@
+body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #eee;
+	font-size: 12px;
+	font-family: 'Microsoft YaHei', Arial, 'Lucida Grande', Tahoma, sans-serif;
+}
+
+body .form-login{
+	text-align: center;
+	max-width: 330px;
+  	margin: 150px auto 0;
+}
+
+body .form-group{
+	margin: 20px;
+}
