@@ -22,7 +22,6 @@ def createTimeCapsule(request):
 		user_to_id = request.POST.get('user_to')
 
 		if user_to_id is None:
-			print("it is for myself!")
 			user_to = request.user
 		else:
 			user_to = User.objects.get(id=user_to_id)
@@ -36,9 +35,7 @@ def createTimeCapsule(request):
 			image_file = request.FILES['capsule']
 
 		new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
-		print('test.........')
 		new_timecapsule.save()
-		print('what.........')
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',

@@ -46,7 +46,7 @@ def createEvent(request):
 @csrf_exempt
 def myspace(request):
 	events = Event.objects.all()
-	return render_to_response('myspace.html', {'events': events})
+	return render_to_response('myspace.html', {'events': events, 'user':request.user})
 
 
 

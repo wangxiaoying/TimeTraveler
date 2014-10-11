@@ -11,6 +11,8 @@ user_patterns = patterns('user.views',
 
 	url(r'^user/newuser$', 'newuser'),
 	url(r'^user/register$', 'register'),
+
+	url(r'^user/logout$', 'logout'),
 )
 
 event_patterns = patterns('event.views',

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 def timecapsule_file(self, filename):
-	url = 'images/timecapsule/%s/%s' % (self.user.username, filename)
+	url = 'images/timecapsule/%s/%s' % (self.user_to.username, filename)
 	return url
 
 class TimeCapsule(models.Model):
