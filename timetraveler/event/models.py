@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-def image_file(self, filename):
-	url = 'images/users/%s/%s' % (self.user.username, filename)
-	return url
 
 class Event(models.Model):
+
+	def image_file(self, filename):
+		url = 'images/users/%s/%s' % (self.user.username, filename)
+		return url
+
 	user = models.ForeignKey(User)
 	text = models.CharField(max_length=200)
 	image_1 = models.FileField(upload_to=image_file)

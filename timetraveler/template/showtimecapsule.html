@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h2>{{ capsule.user_from.username }}送给你的时间囊</h2>
+			<h5>埋下日期：{{ capsule.time_start|date:"Y年m月d日" }}</h5>
+			<h5>挖出日期：{{ capsule.time_end|date:"Y年m月d日" }}</h5>
+			<img src="/media/{{ capsule.image.url }}" style="width:300px; height=300px" alt="..."/>
+			<h4>{{ capsule.text }}</h4>
+		</div>
+	</div>
+
+{% endblock %}

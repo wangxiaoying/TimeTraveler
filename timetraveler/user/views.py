@@ -4,12 +4,15 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
-
-from user.models import *
+from django.template import RequestContext
 
 import simplejson
 import hashlib
+import time
+from datetime import datetime
 
+from user.models import *
+from timecapsule.models import *
 
 ######################################################
 ##login & register & logout
@@ -17,10 +20,9 @@ import hashlib
 @csrf_exempt
 def index(request):
 	if request.user.is_authenticated():
-		print(request.user.username)
 		return HttpResponseRedirect('/event/myspace')
 	else:
-		return render_to_response('login.html')
+		return render_to_response('login.html', context_instance=RequestContext(request))
 
 @csrf_exempt
 def login(request):
@@ -73,7 +75,7 @@ def register(request):
 
 		user = auth.authenticate(username=username, password=password)
 		auth.login(request, user)
-		return HttpResponseRedirect('/user/homepage')
+		return HttpResponseRedirect('/user/index')
 
 	except Exception as e:
 		print(e)
@@ -161,6 +163,23 @@ def getRelationship(request):
 		response['relation'] = 'FAIL'
 		return HttpResponse(simplejson.dumps(response))
 
+
+######################################################
+##get notifications
+def getNotifications(user):
+	now = datetime.now()
+	notifications = []
+	# noti_follow = FollowRelation.objects.filter(user_hero=request.user, have_seen=False)
+	noti_timecapsule = TimeCapsule.objects.filter(user_to=user, time_end__lt=now, has_seen=False)
+
+	for tc in noti_timecapsule:
+		new_noti = {}
+		new_noti['message'] = '%s于%s送给你了一个时间囊~' % (tc.user_from.username, tc.time_end.strftime('%y年%m月%d日'))
+		new_noti['type'] = 'TC'
+		new_noti['origin_id'] = tc.id
+		notifications.append(new_noti)
+
+	return notifications
 
 
 

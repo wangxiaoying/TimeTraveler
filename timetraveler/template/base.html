@@ -1,0 +1,61 @@
+<html>
+<head>
+	<title>TimeTraveler</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="/media/resources/js/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="/media/resources/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-default bg-primary" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/user/homepage">TimeTraveler</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="/event/myspace">主页</a></li>
+				<li><a href="#">我的相册</a></li>
+				<li><a href="/timecapsule/mysouvenir">时间囊</a></li>
+				<li>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="请输入用户名或邮箱">
+						</div>
+						<button type="submit" class="btn btn-default">搜索</button>
+					</form>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" style="margin-right:10px">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">通知
+						<span id="noti-count" class="badge">{{ notifications|length }}</span>
+						{% if notifications %}
+						<span class="caret"></span>
+						{% endif %}
+					</a>
+					{% if notifications %}
+					<ul class="dropdown-menu" role="menu">
+					{% for noti in notifications %}
+						{% if noti.type == 'TC' %}
+						<li role="presentation"><a href="/timecapsule/show?id={{noti.origin_id}}">{{ noti.message }}</a></li>
+						{% else %}
+						<!-- <li role="presentation"><a href="/timecapsule/show?id={{noti.origin_id}}">{{ noti.message }}</a></li> -->
+						{% endif %}
+					{% endfor %}
+					</ul>
+					{% endif %}
+
+				</li>
+				<li><a href="/user/profile">{{ user.username }}</a></li>
+				<li><a href="/user/logout">LogOut</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	{% block content %} {% endblock %}
+
+</body>
+</html>

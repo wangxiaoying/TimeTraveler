@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="row">
+	{% if capsules%}
+		{% for capsule in capsules %}
+		<div class="col-md-3 col-md-offset-1 thumbnail" style="text-align:center">
+			<img src="/media/{{ capsule.image.url }}" style="width:300px; height=300px" alt="..." class="img-thumbnail" href="/timecapsule/show?id={{ capsule.id }}">
+			<h5>来自：{{ capsule.user_from.username }}</h5>
+			<h5>埋下日期：{{ capsule.time_start|date:"Y年m月d日" }}</h5>
+			<h5>挖出日期：{{ capsule.time_end|date:"Y年m月d日" }}</h5>
+			<a href="/timecapsule/show?id={{ capsule.id }}" class="btn btn-default btn-primary">打开</a>
+		</div>
+		{% endfor %}
+	{% else %}
+		<h2>您还没有收到任何时间囊~</h2>
+	{% endif %}
+	</div>
+
+{% endblock %}

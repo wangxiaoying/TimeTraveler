@@ -4,8 +4,13 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.template import RequestContext
+
+import time
+from datetime import datetime
 
 from user.models import *
+from user.views import *
 from timecapsule.models import *
 from timecapsule.forms import *
 
@@ -13,11 +18,15 @@ from timecapsule.forms import *
 ##create new time capsule
 @csrf_exempt
 def newTimeCapsule(request):
-	return render_to_response('newtimecapsule.html')
+	return render_to_response('newtimecapsule.html', context_instance=RequestContext(request))
 
 @csrf_exempt
 def createTimeCapsule(request):
 	try:
+		u = User.objects.all()[0]
+		print (u.id, u.username)
+		
+
 		text = request.POST.get('text')
 		user_to_id = request.POST.get('user_to')
 
@@ -34,8 +43,12 @@ def createTimeCapsule(request):
 		if form.is_valid():
 			image_file = request.FILES['capsule']
 
-		new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
+		date_select = time.strptime(request.POST.get('date-to'), '%Y-%m-%d')
+		date_to = datetime.fromtimestamp(time.mktime(date_select))
+
+		new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file, time_end=date_to)
 		new_timecapsule.save()
+
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',
@@ -44,7 +57,7 @@ def createTimeCapsule(request):
 
 
 	except Exception as e:
-		print(e)
+		print (e)
 		return render_to_response('message.html',
 			{
 				'message': '服务器错误',
@@ -57,8 +70,14 @@ def createTimeCapsule(request):
 def mySouvenir(request):
 	try:
 		capsules = TimeCapsule.objects.filter(user_to=request.user, has_seen=True)
+		notifications = getNotifications(request.user)
 
-		return render_to_response('mysouvenir.html',{'capsules': capsules})
+		return render_to_response('mysouvenir.html',
+			{
+				'capsules': capsules,
+				'notifications': notifications,
+				'user': request.user
+			})
 
 	except Exception as e:
 		print(e)
@@ -67,6 +86,70 @@ def mySouvenir(request):
 				'message': '服务器错误',
 				'url': '/timecapsule/mysouvenir'
 			})
+
+######################################################
+##show a specific time capsule
+@csrf_exempt
+def showTimeCapsule(request):
+	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+
+		capsule_id = request.GET.get('id')
+		capsule = TimeCapsule.objects.get(id=capsule_id)
+
+		if not request.user.id is capsule.user_to.id:
+			return render_to_response('message.html',
+				{
+					'message': '您没有权限访问该时间囊',
+					'url': '/event/myspace'
+				})
+
+		capsule.has_seen = True
+		capsule.save()
+
+		notifications = getNotifications(request.user)
+
+		return render_to_response('showtimecapsule.html',
+			{
+				'capsule': capsule,
+				'notifications': notifications,
+				'user': request.user
+			})
+
+			
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

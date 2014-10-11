@@ -1,51 +1,26 @@
-<html>
-<head>
-	<title>TimeTraveler</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap-theme.min.css">
-</head>
+{% extends "base.html" %}
 
-<body>
-	<nav class="navbar navbar-default bg-primary" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/user/homepage">TimeTraveler</a>
-			</div>
-			<ul class="nav navbar-nav">
-				<li><a href="/user/myalbum">我的相册</li>
-				<li><a href="/timecapsule/new">时间囊</li>
-			</ul>
-			<form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="请输入用户名或邮箱">
-				</div>
-				<button type="submit" class="btn btn-default">搜索</button>
-			</form>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">通知</a></li>
-				<li><a href="/user/profile">{{ user.username }}</a></li>
-				<li><a href="/user/logout">LogOut</a></li>
-			</ul>
-		</div>
-	</nav>
-
+{% block content %}
 	<div class="row">
-		<!-- <div class="col-md-3 col-md-offset-1">
-			<a href="/user/profile" class="thumbnail">
-				<img data-src="/media/photos/portrait/avatar.jpg" alt="...">
+		<div class="col-md-2 col-md-offset-1">
+			<a href="#" style="width:50px, height:50px">
+				{% if profile.portrait %}
+				<img src="/media/{{ profile.portrait.url }}" alt="..."/>
+				{% else %}
+				<img src="/media/photos/portrait/avatar.jpg" alt="..."/>
+				{% endif %}
 			</a>
-			<div class="caption">
-				<h3>{{ user.username }}</h3>
-				<p>
+			<div class="caption" style="text-align:center">
+				<h4>{{ user.username }}</h4>
+				<p>个性签名：{{ profile.signature }}<p>
+				<!-- <p>
 					<a href="#">共发布: {{ events|length }}</a>
 					<a href="#">正在关注: {{ heros|length }}</a>
 					<a href="#">关注者: {{ fans|length }}</a>
-				</p>
+				</p> -->
 			</div>
-		</div> -->
-		<div class="col-md-6 col-md-offset-1">
+		</div>
+		<div class="col-md-7 col-md-offset-1">
 			<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
 				{% csrf_token %}
 				<h5>发布新状态</h5>
@@ -60,15 +35,29 @@
 				</div>
 			</form>
 
-			{% if events %}
+			{% if news %}
 			<ul>
-				{% for event in events %}
+				{% for n in news %}
 				<li>
-					<div>
-						<h4>{{ event.user.username }}</h4>
-						<h5>{{ event.text }}</h5>
-						<a href="/media/{{ event.image_1.url }}">{{ event.image_1.name }}</a>
-						<img data-src="/media/{{ event.image_1.url}}" alt="..."/>
+					<div class="thumbnail">
+						{% if n.user_profile.portrait %}
+						<img src="/media/{{ n.user_profile.portrait.url}}" style="width:50px; height=50px" alt="..."/>
+						{% else %}
+						<img src="/media/photos/portrait/avatar.jpg" style="width:50px; height=50px" alt="..."/>
+						{% endif %}
+						<h4>{{ n.event.user.username }}</h4>
+						<h5>{{ n.event.text }}</h5>
+						<img src="/media/{{ n.event.image_1.url}}" style="width:450px; height=450px" alt="..."/>
+						<h6>{{ n.event.date|date:"Y-m-d" }}</h6>
+						{% for c in n.comments %}
+						<hr/><p>{{ c.user.username }}: {{ c.comment }}</p>
+						{% endfor %}
+						<div class="form-group">
+							<textarea name="comment" class="form-control" rows="1" placeholder="我的评论~" require="true"></textarea>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-default btn-primary">评论</button></br>
+						</div>
 					</div>
 				</li>
 				{% endfor %}
@@ -80,5 +69,4 @@
 		</div>
 	</div>
 
-</body>
-</html>
+{% endblock %}

@@ -5,8 +5,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
 
+import time
+from datetime import datetime
+
 from user.models import *
+from user.views import *
 from event.models import *
+from timecapsule.models import *
 from event.forms import *
 
 ######################################################
@@ -14,6 +19,9 @@ from event.forms import *
 @csrf_exempt
 def createEvent(request):
 	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+
 		text = request.POST.get('text')
 
 		#handle image upload
@@ -42,12 +50,55 @@ def createEvent(request):
 			})
 
 ######################################################
+##create new comment
+@csrf_exempt
+def createComment(request):
+	try:
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+######################################################
 ##show myspace
 @csrf_exempt
 def myspace(request):
-	events = Event.objects.all()
-	return render_to_response('myspace.html', {'events': events, 'user':request.user})
+	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
 
+		notifications = getNotifications(request.user)
+		profile = UserProfile.objects.get(user=request.user)
+
+		news = []
+		events = Event.objects.all()
+		for event in events:
+			new_news = {}
+			new_news['event'] = event
+			profile = UserProfile.objects.get(user=event.user)
+			new_news['user_profile'] = profile
+			comments = Comment.objects.filter(event=event)
+			new_news['comments'] = comments
+			news.append(new_news)
+
+
+		return render_to_response('myspace.html', 
+			{
+				'news': news, 
+				'user': request.user, 
+				'notifications': notifications,
+				'profile': profile
+			})
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
 
 
 

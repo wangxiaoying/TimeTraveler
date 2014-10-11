@@ -6,8 +6,11 @@ admin.autodiscover()
 from timetraveler.settings import *
 
 user_patterns = patterns('user.views',
+    url(r'^$', 'index'),
+    url(r'^/index$', 'index'),
 	url(r'^user/index$', 'index'),
 	url(r'^user/login$', 'login'),
+    url(r'^user/logout$', 'logout'),
 
 	url(r'^user/newuser$', 'newuser'),
 	url(r'^user/register$', 'register'),
@@ -23,7 +26,10 @@ event_patterns = patterns('event.views',
 timecapsule_patterns = patterns('timecapsule.views',
 	url(r'^timecapsule/new$', 'newTimeCapsule'),
 	url(r'^timecapsule/create$', 'createTimeCapsule'),
-	url(r'^timecapsule/mysouvenir$', 'mySouvenir')
+
+	url(r'^timecapsule/mysouvenir$', 'mySouvenir'),
+	
+	url(r'^timecapsule/show$', 'showTimeCapsule'),
 )
 
 urlpatterns = patterns('',
