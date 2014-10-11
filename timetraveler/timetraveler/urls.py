@@ -18,6 +18,11 @@ event_patterns = patterns('event.views',
 	url(r'^event/create$', 'createEvent'),
 )
 
+timecapsule_patterns = patterns('timecapsule.views',
+	url(r'^timecapsule/new$', 'newTimeCapsule'),
+	url(r'^timecapsule/create$', 'createTimeCapsule'),
+
+)
 
 urlpatterns = patterns('',
     # Examples:
@@ -26,4 +31,4 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': MEDIA_ROOT }),
-)+user_patterns+event_patterns
+)+user_patterns+event_patterns+timecapsule_patterns
