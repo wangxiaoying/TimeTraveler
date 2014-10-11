@@ -21,7 +21,7 @@ event_patterns = patterns('event.views',
 timecapsule_patterns = patterns('timecapsule.views',
 	url(r'^timecapsule/new$', 'newTimeCapsule'),
 	url(r'^timecapsule/create$', 'createTimeCapsule'),
-
+	url(r'^timecapsule/mysouvenir$', 'mySouvenir')
 )
 
 urlpatterns = patterns('',

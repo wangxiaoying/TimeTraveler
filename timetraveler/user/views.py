@@ -17,9 +17,10 @@ import hashlib
 @csrf_exempt
 def index(request):
 	if request.user.is_authenticated():
-		return render_to_response('login.html')
-	else:
+		print(request.user.username)
 		return HttpResponseRedirect('/event/myspace')
+	else:
+		return render_to_response('login.html')
 
 @csrf_exempt
 def login(request):

@@ -42,7 +42,7 @@ def createTimeCapsule(request):
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',
-				'url': '/timecapsule/mySouvenir'
+				'url': '/timecapsule/mysouvenir'
 			})
 
 
@@ -51,22 +51,25 @@ def createTimeCapsule(request):
 		return render_to_response('message.html',
 			{
 				'message': '服务器错误',
-				'url': '/timecapsule/mySouvenir'
+				'url': '/timecapsule/mysouvenir'
 			})
 
 ######################################################
 ##show all recieved time capsule
-# @csrf_exempt
-# def mySouvenir(request):
-# 	try:
+@csrf_exempt
+def mySouvenir(request):
+	try:
+		capsules = TimeCapsule.objects.filter(user_to=request.user, has_seen=True)
 
-# 	except Exception as e:
-# 		print(e)
-# 		return render_to_response('message.html',
-# 			{
-# 				'message': '服务器错误',
-# 				'url': '/event/myspace'
-# 			})
+		return render_to_response('mysouvenir.html',{'capsules': capsules})
+
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/timecapsule/mysouvenir'
+			})
 
 
 
