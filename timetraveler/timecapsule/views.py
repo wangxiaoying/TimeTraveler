@@ -19,6 +19,10 @@ def newTimeCapsule(request):
 @csrf_exempt
 def createTimeCapsule(request):
 	try:
+		u = User.objects.all()[0]
+		print (u.id, u.username)
+		
+
 		text = request.POST.get('text')
 		user_to_id = request.POST.get('user_to')
 
@@ -36,14 +40,9 @@ def createTimeCapsule(request):
 		if form.is_valid():
 			image_file = request.FILES['capsule']
 
-		#new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
-		u = User.objects.all()[0]
-		print (u.id, u.username)
-		nt = TimeCapsule(user_from=u, user_to=u, text=text, image=image_file)
-		print('test.........')
-		#new_timecapsule.save()
+		nt = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
 		nt.save()
-		print('what.........')
+
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',
