@@ -36,9 +36,13 @@ def createTimeCapsule(request):
 		if form.is_valid():
 			image_file = request.FILES['capsule']
 
-		new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
+		#new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file)
+		u = User.objects.all()[0]
+		print (u.id, u.username)
+		nt = TimeCapsule(user_from=u, user_to=u, text=text, image=image_file)
 		print('test.........')
-		new_timecapsule.save()
+		#new_timecapsule.save()
+		nt.save()
 		print('what.........')
 		return render_to_response('message.html',
 			{
@@ -49,7 +53,6 @@ def createTimeCapsule(request):
 
 	except Exception as e:
 		print (e)
-		raise (e)
 		return render_to_response('message.html',
 			{
 				'message': '服务器错误',
