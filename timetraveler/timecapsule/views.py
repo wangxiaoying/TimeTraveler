@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.template import RequestContext
 
 from user.models import *
 from timecapsule.models import *
@@ -13,7 +14,7 @@ from timecapsule.forms import *
 ##create new time capsule
 @csrf_exempt
 def newTimeCapsule(request):
-	return render_to_response('newtimecapsule.html')
+	return render_to_response('newtimecapsule.html', context_instance=RequestContext(request))
 
 @csrf_exempt
 def createTimeCapsule(request):
@@ -47,7 +48,8 @@ def createTimeCapsule(request):
 
 
 	except Exception as e:
-		print(e)
+		print (e)
+		raise (e)
 		return render_to_response('message.html',
 			{
 				'message': '服务器错误',

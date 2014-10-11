@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.template import ReqestContext
 
 from user.models import *
 
@@ -17,9 +18,9 @@ import hashlib
 @csrf_exempt
 def index(request):
 	if request.user.is_authenticated():
-		return render_to_response('login.html')
-	else:
 		return HttpResponseRedirect('/event/myspace')
+	else:
+		return render_to_response('login.html', context_instance=RequestContext(request))
 
 @csrf_exempt
 def login(request):
@@ -72,7 +73,7 @@ def register(request):
 
 		user = auth.authenticate(username=username, password=password)
 		auth.login(request, user)
-		return HttpResponseRedirect('/user/homepage')
+		return HttpResponseRedirect('/user/index')
 
 	except Exception as e:
 		print(e)

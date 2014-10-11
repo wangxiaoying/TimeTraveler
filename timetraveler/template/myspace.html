@@ -14,15 +14,17 @@
 				<a class="navbar-brand" href="/user/homepage">TimeTraveler</a>
 			</div>
 			<ul class="nav navbar-nav">
-				<li><a href="#">我的相册</li>
-				<li><a href="/timecapsule/new">时间囊</li>
+				<li><a href="#">我的相册</a></li>
+				<li><a href="/timecapsule/new">时间囊</a></li>
+				<li>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="请输入用户名或邮箱">
+						</div>
+						<button type="submit" class="btn btn-default">搜索</button>
+					</form>
+				</li>
 			</ul>
-			<form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="请输入用户名或邮箱">
-				</div>
-				<button type="submit" class="btn btn-default">搜索</button>
-			</form>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="#">通知</a></li>
 				<li><a href="/user/profile">{{ user.username }}</a></li>
@@ -44,7 +46,7 @@
 				</p>
 			</div>
 		</div> -->
-		<div class="col-md-6 col-md-offset-1">
+		<div class="col-md-6 col-md-offset-3">
 			<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
 				{% csrf_token %}
 				<h5>发布新状态</h5>
@@ -66,8 +68,7 @@
 					<div>
 						<h4>{{ event.user.username }}</h4>
 						<h5>{{ event.text }}</h5>
-						<a href="/media/{{ event.image_1.url }}">{{ event.image_1.name }}</a>
-						<img data-src="/media/{{ event.image_1.url}}" alt="..."/>
+						<img src="/media/{{ event.image_1.url}}" style="width:150px; height=150px" alt="..."/>
 					</div>
 				</li>
 				{% endfor %}
