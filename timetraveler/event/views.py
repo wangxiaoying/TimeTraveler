@@ -80,14 +80,17 @@ def createComment(request):
 		message = '%s于%s对您发言过的时间碎片做了评论~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
 		user_to = Comment.objects.filter(event=event).values('user').distinct()
 
-		for u in user_to:
-			if u is not request.user:
+		for user_id in user_to:
+			u = User.objects.get(id=user_id['user'])
+			if u != request.user and u != event.user:
 				new_noti = Notification(user=u, event=event, message=message)
 				new_noti.save()
 
-		message0 = '%s于%s对您发布的时间碎片做了评论~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
-		new_noti = Notification(user=event.user, event=event, message=message)
-		new_noti.save()
+		if request.user != event.user:
+			print('haha not me')
+			message0 = '%s于%s对评论了您的时间碎片~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
+			new_noti = Notification(user=event.user, event=event, message=message0)
+			new_noti.save()
 
 		return HttpResponse(simplejson.dumps(response))
 
@@ -128,6 +131,49 @@ def myspace(request):
 				'message': '服务器错误',
 				'url': '/event/myspace'
 			})
+
+######################################################
+##show a specific event
+@csrf_exempt
+def showEvent(request):
+	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+
+		event_id = request.GET.get('id')
+		event = Event.objects.get(id=event_id)
+		comments = Comment.objects.filter(event=event)
+
+		news = {}
+		news['event'] = event
+		news['comments'] = comments
+
+		Notification.objects.filter(event=event, user=request.user).update(has_seen=True)
+		notifications = getNotifications(request.user)
+
+		return render_to_response('showevent.html',
+			{
+				'news': news,
+				'notifications': notifications,
+				'user': request.user
+			})
+
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+
+
+
+
+
+
+
+
 
 
 

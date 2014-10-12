@@ -21,6 +21,7 @@ user_patterns = patterns('user.views',
 event_patterns = patterns('event.views',
 	url(r'^event/myspace$', 'myspace'),
 	url(r'^event/create$', 'createEvent'),
+	url(r'^event/show$', 'showEvent'),
 
 	url(r'^event/newcomment$', 'createComment'),
 )

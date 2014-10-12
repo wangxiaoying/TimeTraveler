@@ -47,7 +47,7 @@
 						{% if noti.type == 'TC' %}
 						<li role="presentation"><a href="/timecapsule/show?id={{noti.origin_id}}">{{ noti.message }}</a></li>
 						{% else %}
-						<!-- <li role="presentation"><a href="/timecapsule/show?id={{noti.origin_id}}">{{ noti.message }}</a></li> -->
+						<li role="presentation"><a href="/event/show?id={{noti.origin_id}}">{{ noti.message }}</a></li>
 						{% endif %}
 					{% endfor %}
 					</ul>
