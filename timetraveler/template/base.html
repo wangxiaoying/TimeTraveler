@@ -7,13 +7,18 @@
 	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap-theme.min.css">
 	<script type="text/javascript" src="/media/resources/js/jquery/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="/media/resources/bootstrap/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/media/resources/css/base.css">
+	
+	{% block css %} {% endblock %}
+	{% block js %} {% endblock %}
 </head>
 
 <body>
-	<nav class="navbar navbar-default bg-primary" role="navigation">
+	<nav class="navbar navbar-inverse bg-primary" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="/user/homepage">TimeTraveler</a>
+				<a class="navbar-brand" href="/user/index">TimeTraveler</a>
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="/event/myspace">主页</a></li>
@@ -55,7 +60,9 @@
 		</div>
 	</nav>
 
+	<div class="container">
 	{% block content %} {% endblock %}
+</div>
 
 </body>
 </html>

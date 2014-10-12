@@ -54,7 +54,7 @@ def createEvent(request):
 @csrf_exempt
 def createComment(request):
 	try:
-		
+		print ('aa')
 	except Exception as e:
 		print(e)
 		return render_to_response('message.html',
@@ -75,7 +75,7 @@ def myspace(request):
 		profile = UserProfile.objects.get(user=request.user)
 
 		news = []
-		events = Event.objects.all()
+		events = Event.objects.all().order_by('-date')
 		for event in events:
 			new_news = {}
 			new_news['event'] = event

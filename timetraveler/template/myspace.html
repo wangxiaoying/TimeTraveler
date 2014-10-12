@@ -1,18 +1,28 @@
 {% extends "base.html" %}
 
+{% block css %}
+
+<link rel="stylesheet" type="text/css" href="/media/resources/css/myspace.css">
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/media/resources/js/myspace.js"></script>
+{% endblock %}
+
 {% block content %}
-	<div class="row">
-		<div class="col-md-2 col-md-offset-1">
-			<a href="#" style="width:50px, height:50px">
-				{% if profile.portrait %}
-				<img src="/media/{{ profile.portrait.url }}" alt="..."/>
-				{% else %}
-				<img src="/media/photos/portrait/avatar.jpg" alt="..."/>
-				{% endif %}
-			</a>
-			<div class="caption" style="text-align:center">
-				<h4>{{ user.username }}</h4>
-				<p>个性签名：{{ profile.signature }}<p>
+<div class="row">
+	<div class="col-md-2 col-md-offset-1">
+		<a href="#" style="width:50px, height:50px">
+			{% if profile.portrait %}
+			<img src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded"/>
+			{% else %}
+			<img src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"/>
+			{% endif %}
+		</a>
+		<div class="caption" style="text-align:center">
+			<h4>{{ user.username }}</h4>
+			<p>个性签名：{{ profile.signature }}<p>
 				<!-- <p>
 					<a href="#">共发布: {{ events|length }}</a>
 					<a href="#">正在关注: {{ heros|length }}</a>
@@ -21,47 +31,68 @@
 			</div>
 		</div>
 		<div class="col-md-7 col-md-offset-1">
-			<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
-				{% csrf_token %}
-				<h5>发布新状态</h5>
-				<div class="form-group">
-					<textarea name="text" class="form-control" rows="3" placeholder="我的新鲜事~" require="true"></textarea>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
+						{% csrf_token %}
+						<div class="form-group">
+							<textarea name="text" class="form-control" rows="3" placeholder="我的新鲜事~" require="true"></textarea>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<span class="file-input btn btn-info btn-file">
+									选取图片 <input type="file" name="images">
+									<span></span>
+								</span>
+							</div>
+							<div class="col-md-6">
+								<button type="submit" class="btn btn-default btn-primary pull-right">发布</button></br>
+							</div>
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<input type="file" name="images">
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-primary">发布</button></br>
-				</div>
-			</form>
+			</div>
+
 
 			{% if news %}
-			<ul>
-				{% for n in news %}
-				<li>
-					<div class="thumbnail">
-						{% if n.user_profile.portrait %}
-						<img src="/media/{{ n.user_profile.portrait.url}}" style="width:50px; height=50px" alt="..."/>
-						{% else %}
-						<img src="/media/photos/portrait/avatar.jpg" style="width:50px; height=50px" alt="..."/>
-						{% endif %}
-						<h4>{{ n.event.user.username }}</h4>
-						<h5>{{ n.event.text }}</h5>
-						<img src="/media/{{ n.event.image_1.url}}" style="width:450px; height=450px" alt="..."/>
-						<h6>{{ n.event.date|date:"Y-m-d" }}</h6>
-						{% for c in n.comments %}
-						<hr/><p>{{ c.user.username }}: {{ c.comment }}</p>
-						{% endfor %}
-						<div class="form-group">
-							<textarea id="comment" name="comment" class="form-control" rows="1" placeholder="我的评论~" require="true"></textarea>
+			{% for n in news %}
+			<div class="list-group">
+				<div class="list-group-item">
+					<div class="row">
+						<div class="col-md-1">
+							{% if n.user_profile.portrait %}
+							<img src="/media/{{ n.user_profile.portrait.url}}" style="width:50px; height=50px" alt="..."/>
+							{% else %}
+							<img src="/media/photos/portrait/avatar.jpg" style="width:50px; height=50px" alt="..."/>
+							{% endif %}
 						</div>
-						<div class="form-group">
-							<button id="do-comment" type="submit" class="btn btn-default btn-primary" onclick="do_comment()">评论</button></br>
+						<div class="col-md-11">
+							<a href="#" style="padding-left:10px">{{ n.event.user.username }}</a>
+							{{ n.event.date|date:"Y-m-d"}}
 						</div>
 					</div>
-				</li>
-				{% endfor %}
-			</ul>
+					<h5>{{ n.event.text }}</h5>
+				</div>
+				<div class="list-group-item">
+					<img src="/media/{{ n.event.image_1.url}}" style="width:450px; height=450px" alt="..."/>
+				</div>
+				{% if comments %}
+				<div class="list-group-item">
+					{% for c in n.comments %}
+					<hr/><p>{{ c.user.username }}: {{ c.comment }}</p>
+					{% endfor %}
+				</div>
+				{% endif %}
+				<div class="list-group-item">
+					<div class="form-group">
+						<textarea id="comment" name="comment" class="form-control" rows="1" placeholder="我的评论~" require="true"></textarea>
+					</div>
+					<div class="form-group">
+						<button id="do-comment" type="submit" class="btn btn-default btn-primary" onclick="do_comment()">评论</button></br>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
 			{% else %}
 			<h3>没有任何新鲜事</h3>
 			{% endif %}
@@ -69,4 +100,4 @@
 		</div>
 	</div>
 
-{% endblock %}
+	{% endblock %}
