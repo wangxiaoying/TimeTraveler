@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.template import RequestContext
 
 import time
 from datetime import datetime
@@ -72,27 +73,34 @@ def myspace(request):
 			return HttpResponseRedirect('/user/index')
 
 		notifications = getNotifications(request.user)
-		profile = UserProfile.objects.get(user=request.user)
+		profile = request.user.userprofile
 
 		news = []
 		events = Event.objects.all().order_by('-date')
+		my_events = []
 		for event in events:
+			if event.user == request.user:
+				my_events.append(event)
 			new_news = {}
 			new_news['event'] = event
-			profile = UserProfile.objects.get(user=event.user)
-			new_news['user_profile'] = profile
+			new_news['user_profile'] = event.user.userprofile
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
 			news.append(new_news)
 
+		my_fans = FollowRelation.objects.filter(user_hero=request.user)
+		my_heros = FollowRelation.objects.filter(user_fan=request.user)
 
 		return render_to_response('myspace.html', 
 			{
 				'news': news, 
 				'user': request.user, 
 				'notifications': notifications,
-				'profile': profile
-			})
+				'profile': profile,
+				'my_events': my_events,
+				'heros': my_heros,
+				'fans': my_fans,
+			}, context_instance=RequestContext(request))
 	except Exception as e:
 		print(e)
 		return render_to_response('message.html',

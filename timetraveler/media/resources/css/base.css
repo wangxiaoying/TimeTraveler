@@ -1,8 +1,8 @@
 .navbar-inverse { background-color: #6790D6; border-radius: 0}
 .navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: #428BCA}
 .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { background-color: #46499E}
-.dropdown-menu { background-color: #6790D6}
-.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-color: #428BCA}
+.dropdown-menu { background-color: #ffffff; border-color: #6790D6; border-width: 2px;}
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-color: #6790D6}
 .navbar-inverse { background-image: none; }
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { background-image: none; }
 .navbar-inverse { border-color: #6790D6}
@@ -12,12 +12,12 @@
 .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { color: #E6E6E6}
 .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { color: #FFFFFF}
 .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus { color: #FFFFFF}
-.dropdown-menu>li>a { color: #E6E6E6}
-.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { color: #E6E6E6}
-.navbar-inverse .navbar-nav>.dropdown>a .caret { border-top-color: #E6E6E6}
-.navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-top-color: #E6E6E6}
-.navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #E6E6E6}
-.navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #E6E6E6}
+.dropdown-menu>li>a { color: #000000}
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus { color: #ffffff}
+.navbar-inverse .navbar-nav>.dropdown>a .caret { border-top-color: #ffffff}
+.navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-top-color: #ffffff}
+.navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #ffffff}
+.navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #ffffff}
 
 body {
 	background-color: #e9eaed;

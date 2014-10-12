@@ -12,6 +12,7 @@ import time
 from datetime import datetime
 
 from user.models import *
+from user.forms import *
 from timecapsule.models import *
 
 ######################################################
@@ -163,6 +164,41 @@ def getRelationship(request):
 		response['relation'] = 'FAIL'
 		return HttpResponse(simplejson.dumps(response))
 
+######################################################
+## upload portrait
+
+@csrf_exempt
+def uploadPortrait(request):
+	try:
+		form = PortraitForm(request.POST, request.FILES)
+
+		portrait = None
+		if form.is_valid():
+			portrait = request.FILES['portrait']
+
+		if portrait is not None:
+			up = UserProfile.objects.get(user=request.user)
+			up.portrait = portrait
+			up.save()
+			return render_to_response('message.html',
+				{
+					'message': '头像更改成功',
+					'url': '/'
+				})
+
+		return render_to_response('message.html',
+				{
+					'message': '头像上传失败',
+					'url': '/'
+				})
+	except Exception as e:
+		print (e)
+		return render_to_response('message.html',
+				{
+					'message': '服务器错误',
+					'url': '/'
+				})
+
 
 ######################################################
 ##get notifications
@@ -180,9 +216,6 @@ def getNotifications(user):
 		notifications.append(new_noti)
 
 	return notifications
-
-
-
 
 
 

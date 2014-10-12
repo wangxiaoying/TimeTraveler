@@ -11,6 +11,7 @@ user_patterns = patterns('user.views',
 	url(r'^user/index$', 'index'),
 	url(r'^user/login$', 'login'),
     url(r'^user/logout$', 'logout'),
+    url(r'^user/upload_portrait', 'uploadPortrait'),
 
 	url(r'^user/newuser$', 'newuser'),
 	url(r'^user/register$', 'register'),

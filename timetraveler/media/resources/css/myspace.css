@@ -2,6 +2,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .btn-file input[type=file] {
   position: absolute;
   top: 0;
@@ -16,7 +17,17 @@
   cursor: inherit;
   display: block;
 }
+
 input[readonly] {
   background-color: white !important;
   cursor: text !important;
+}
+
+.event-title {
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.signature-style {
+  color: #694E4E;
 }
