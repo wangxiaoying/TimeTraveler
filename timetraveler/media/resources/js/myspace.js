@@ -20,7 +20,7 @@ function do_comment(event_id){
 				var cs = $("#comment-list-"+event_id).html().trim();
 				var str = '';
 				if (cs != '') str = '<hr>';
-				str += '<div class="row"><div class="col-md-1"><img src="/media/' + portrait + '" alt="..." class="img-rounded" height="40" width="40"/></div><div class="col-md-11"><a href="#" style="padding-left:10px">' + username + '</a><span style="padding-left:10px">' + date + '</span><p style="padding-left: 10px">' + comment + '</p></div></div>';
+				str += '<div class="row"><div class="col-md-1"><img src="/media/' + portrait + '" alt="..." class="img-rounded" height="40" width="40"/></div><div class="col-md-11"><a href="#" style="padding-left:10px">' + username + '</a><span style="padding-left:10px" class="pull-right">' + date + '</span><p style="padding-left: 10px">' + comment + '</p></div></div>';
 
 				cs += str;
 				$("#comment-list-"+event_id).html(cs);

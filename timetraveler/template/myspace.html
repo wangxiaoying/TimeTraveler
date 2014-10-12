@@ -63,9 +63,9 @@
 							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
 							{% endif %}
 						</div>
-						<div class="col-md-11">
-							<a href="#" style="padding-left:10px">{{ n.event.user.username }}</a>
-							{{ n.event.date|date:"Y-m-d"}}
+						<div class="col-md-10 event-title">
+							<p><a href="#">{{ n.event.user.username }}</a></p>
+							<p><a href="/event/show?id={{ n.event.id }}">{{ n.event.date|date:"Y-m-d"}}</a></p>
 						</div>
 					</div>
 					<h5>{{ n.event.text }}</h5>
@@ -92,7 +92,7 @@
 						</div>
 						<div class="col-md-11">
 							<a href="#" style="padding-left:10px">{{ c.user.username }}</a>
-							<span style"padding-left:10px">{{ c.date|date:"Y-m-d"}}</span>
+							<span style"padding-left:10px" class="pull-right">{{ c.date|date:"Y-m-d"}}</span>
 							<p style="padding-left: 10px">{{ c.comment }}</p>
 						</div>
 					</div>
