@@ -61,9 +61,9 @@
 					<div class="row">
 						<div class="col-md-1">
 							{% if n.user_profile.portrait %}
-							<img src="/media/{{ n.user_profile.portrait.url}}" style="width:50px; height=50px" alt="..."/>
+							<img src="/media/{{ n.user_profile.portrait.url}}" class="img-rounded" style="width:50px; height=50px" alt="..."/>
 							{% else %}
-							<img src="/media/photos/portrait/avatar.jpg" style="width:50px; height=50px" alt="..."/>
+							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" style="width:50px; height=50px" alt="..."/>
 							{% endif %}
 						</div>
 						<div class="col-md-11">
