@@ -112,12 +112,12 @@ def follow(request):
 		follow_relation = FollowRelation.objects.create(user_hero=user_hero, user_fan=request.user)
 		follow_relation.save()
 
-		response['result'] = 'SUCCESS'
+		response['result'] = 'success'
 		return HttpResponse(simplejson.dumps(response))
 
 	except Exception as e:
 		print(e)
-		response['result'] = 'FAIL'
+		response['result'] = 'fail'
 		return HttpResponse(simplejson.dumps(response))
 
 @csrf_exempt
@@ -129,40 +129,44 @@ def unfollow(request):
 
 		FollowRelation.objects.filter(user_hero=user_hero, user_fan=request.user).delete()
 
-		response['result'] = 'SUCCESS'
+		response['result'] = 'success'
 		return HttpResponse(simplejson.dumps(response))
 
 	except Exception as e:
 		print(e)
-		response['result'] = 'FAIL'
+		response['result'] = 'fail'
 		return HttpResponse(simplejson.dumps(response))
 
 @csrf_exempt
 def getRelationship(request):
 	response = {}
 	try:
-		user_id_1 = request.POST.get('user_1')
-		user_id_2 = request.POST.get('user_2')
+		user_id = request.POST.get('user_id')
 
-		user_1 = User.objects.get(id=user_id_1)
-		user_2 = User.objects.get(id=user_id_2)
+		if user_id == str(request.user.id):
+			response['relation'] = 'myself'
+			response['result'] = 'success'
+			return HttpResponse(simplejson.dumps(response))
 
-		relation_1 = FollowRelation.objects.filter(user_hero=user_1, user_fan=user_2)
-		relation_2 = FollowRelation.objects.filter(user_hero=user_2, user_fan=user_1)
+		user_aim = User.objects.get(id=user_id)
+
+		relation_1 = FollowRelation.objects.filter(user_hero=request.user, user_fan=user_aim)
+		relation_2 = FollowRelation.objects.filter(user_hero=user_aim, user_fan=request.user)
 
 		if len(relation_1) > 0 and len(relation_2) > 0:
-			response['relation'] = 'FRIEND'
+			response['relation'] = 'fiend'
 		elif len(relation_2) > 0:
-			response['relation'] = 'HERO'
+			response['relation'] = 'hero'
 		elif len(relation_1) > 0:
-			response['relation'] = 'FAN'
+			response['relation'] = 'fan'
 		else:
-			response['relation'] = 'NA'
+			response['relation'] = 'na'
+		response['result'] = 'success'
 		return HttpResponse(simplejson.dumps(response))
 
 	except Exception as e:
 		print(e)
-		response['relation'] = 'FAIL'
+		response['result'] = 'fail'
 		return HttpResponse(simplejson.dumps(response))
 
 ######################################################

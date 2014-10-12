@@ -17,10 +17,14 @@ user_patterns = patterns('user.views',
 	url(r'^user/register$', 'register'),
 
 	url(r'^user/logout$', 'logout'),
+
+	url(r'^user/getrelation$', 'getRelationship'),
 )
 
 event_patterns = patterns('event.views',
 	url(r'^event/myspace$', 'myspace'),
+	url(r'^event/homepage$', 'homepage'),
+
 	url(r'^event/create$', 'createEvent'),
 	url(r'^event/show$', 'showEvent'),
 

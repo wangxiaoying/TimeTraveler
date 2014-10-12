@@ -8,6 +8,10 @@
 <script type="text/javascript" src="/media/resources/js/myspace.js"></script>
 {% endblock %}
 
+{% block body %}
+<body>
+{% endblock %}
+
 {% block content %}
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 thumbnail">
@@ -25,10 +29,10 @@
 			</div>
 		</div>
 		
-			<h4>{{ news.event.text }}</h4>
+		<h4>{{ news.event.text }}</h4>
 		{% if news.event.image_1 != "" %}
 		<div align="center">
-			<img src="/media/{{ news.event.image_1.url}}" width="450" height="450" alt="..."/>
+			<img src="/media/{{ news.event.image_1.url}}" width="650" height="auto" alt="..."/>
 		</div>
 		{% endif %}
 

@@ -8,24 +8,32 @@
 <script type="text/javascript" src="/media/resources/js/myspace.js"></script>
 {% endblock %}
 
+{% block body %}
+<body onload="set_relation_btn({{ user.id }})">
+{% endblock %}
+
 {% block content %}
 <div class="row">
 	<div class="col-md-2 col-md-offset-1" align="center">
 		<div data-toggle="modal" data-target="#upload-portrait">
-			{% if profile.portrait %}
-			<img height="200" width="200" src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded"/>
+			{% if user.userprofile.portrait %}
+			<img height="200" width="200" src="/media/{{ user.userprofile.portrait.url }}" alt="..." class="img-rounded"/>
 			{% else %}
 			<img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"/>
 			{% endif %}
 		</div>
 		<div class="caption" style="text-align:center">
+			<hr/>
 			<h3>{{ user.username }}</h3>
-			{% if profile.signature != "" %}
-			<p class="signature-style">- {{ profile.signature }} -</p>
+			{% if user.userprofile.signature != "" %}
+			<p class="signature-style">- {{ user.userprofile.signature }} -</p>
 			{% endif %}
+			<hr/>
 			<p>共发布: {{ my_events|length }}</p>
 			<p>正在关注: {{ heros|length }}</p>
 			<p>关注者: {{ fans|length }}</p>
+			<hr/>
+			<button id="btn_relation" class="btn btn-default btn-block" type="button" value=""></button>
 		</div>
 	</div>
 	<div class="col-md-7 col-md-offset-1">
@@ -64,7 +72,7 @@
 							{% endif %}
 						</div>
 						<div class="col-md-10 event-title">
-							<p><a href="#">{{ n.event.user.username }}</a></p>
+							<p><a href="/event/homepage?user_id={{ n.event.user.id }}">{{ n.event.user.username }}</a></p>
 							<p><a href="/event/show?id={{ n.event.id }}">{{ n.event.date|date:"Y-m-d"}}</a></p>
 						</div>
 					</div>
@@ -73,7 +81,7 @@
 
 				{% if n.event.image_1.name != "" %}
 				<div class="list-group-item">
-					<img src="/media/{{ n.event.image_1.url }}" style="width:450px; height=450px" alt="..."/>
+					<img src="/media/{{ n.event.image_1.url }}" width="450" height="auto" alt="..."/>
 				</div>
 				{% endif %}
 
@@ -91,7 +99,7 @@
 							{% endif %}
 						</div>
 						<div class="col-md-11">
-							<a href="#" style="padding-left:10px">{{ c.user.username }}</a>
+							<a href="/event/homepage?user_id={{ c.user.id }}" style="padding-left:10px">{{ c.user.username }}</a>
 							<span style"padding-left:10px" class="pull-right">{{ c.date|date:"Y-m-d"}}</span>
 							<p style="padding-left: 10px">{{ c.comment }}</p>
 						</div>
