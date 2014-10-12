@@ -10,29 +10,79 @@ function do_comment(event_id){
 		type: "POST",
 		data: {"text": text, "event_id": event_id},
 		success: function(d, s, j) {
-			var json = $.parseJSON(d)
+			var json = $.parseJSON(d);
 			if (json.result == "success") {
 				var comment = json.comment;
 				var portrait = json.portrait;
-				var username = json.username
-				var date = json.date
+				var user_id = json.user_id;
+				var username = json.username;
+				var date = json.date;
 
 				var cs = $("#comment-list-"+event_id).html().trim();
 				var str = '';
 				if (cs != '') str = '<hr>';
-				str += '<div class="row"><div class="col-md-1"><img src="/media/' + portrait + '" alt="..." class="img-rounded" height="40" width="40"/></div><div class="col-md-11"><a href="#" style="padding-left:10px">' + username + '</a><span style="padding-left:10px" class="pull-right">' + date + '</span><p style="padding-left: 10px">' + comment + '</p></div></div>';
-
+				str += '<div class="row"><div class="col-md-1"><img src="/media/' + portrait + '" alt="..." class="img-rounded" height="40" width="40"/></div><div class="col-md-11"><a href="/event/homepage?user_id=' + user_id +'" style="padding-left:10px">' + username + '</a><span style="padding-left:10px" class="pull-right">' + date + '</span><p style="padding-left: 10px">' + comment + '</p></div></div>';
 				cs += str;
 				$("#comment-list-"+event_id).html(cs);
 				$("#comment-list-"+event_id).css("display", "block");
 				$("#comment-"+event_id).val('')
 			}
 			else{
-				alert("服务器错误")
+				alert("服务器错误");
 			}
 		},
 		error: function(j, s, e) {
 			console.log(e);
+		}
+	});
+}
+
+function set_relation_btn(user_id){
+
+	console.log("hehehe");
+
+	$.ajax({
+		url: "/user/getrelation",
+		type: "POST",
+		data: {"user_id": user_id},
+		success: function(d, s, j){
+			var json = $.parseJSON(d);
+			console.log(json.relation)
+			if(json.result == "success"){
+				if(json.relation == "myself"){
+					console.log("hahas")
+					$("#btn_relation").text("更改密码");
+					$("#btn_relation").addClass("btn-primary");
+				}
+				else if(json.relation == "friend" || json.relation == "hero"){
+					
+					$("#btn_relation").mouseover(
+						function(){
+							$("#btn_relation").text("取消关注");
+							$("#btn_relation").removeClass("btn-success");
+							$("#btn_relation").addClass("btn-danger");
+						}
+					);
+					$("#btn_relation").mouseout(
+						function(){
+							$("#btn_relation").text("正在关注");
+							$("#btn_relation").removeClass("btn-danger");
+							$("#btn_relation").addClass("btn-success");
+						}
+					);
+				}	
+				else{
+					$("#btn_relation").text("+关注");
+					$("#btn_relation").addClass("btn-info");
+				}
+			}
+			else{
+				alert("服务器错误");
+			}
+
+		},
+		error: function(j, s, e){
+			console.log(e)
 		}
 	});
 }

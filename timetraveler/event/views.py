@@ -70,6 +70,7 @@ def createComment(request):
 
 		response['result'] = 'success'
 		response['comment'] = comment.comment
+		response['user_id'] = request.user.id
 		response['username'] = request.user.username
 		if request.user.userprofile.portrait:
 			response['portrait'] = request.user.userprofile.portrait.url
@@ -98,6 +99,7 @@ def createComment(request):
 	except Exception as e:
 		print(e)
 		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
 
 ######################################################
 ##show myspace
@@ -108,7 +110,6 @@ def myspace(request):
 			return HttpResponseRedirect('/user/index')
 
 		notifications = getNotifications(request.user)
-		profile = request.user.userprofile
 
 		news = []
 		events = Event.objects.all().order_by('-date')
@@ -118,7 +119,6 @@ def myspace(request):
 				my_events.append(event)
 			new_news = {}
 			new_news['event'] = event
-			new_news['user_profile'] = event.user.userprofile
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
 			news.append(new_news)
@@ -131,7 +131,6 @@ def myspace(request):
 				'news': news, 
 				'user': request.user, 
 				'notifications': notifications,
-				'profile': profile,
 				'my_events': my_events,
 				'heros': my_heros,
 				'fans': my_fans,
@@ -144,6 +143,47 @@ def myspace(request):
 				'message': '服务器错误',
 				'url': '/event/myspace'
 			})
+
+######################################################
+##user homepage
+@csrf_exempt
+def homepage(request):
+	try:
+		user_id = request.GET.get('user_id')
+		user_aim = User.objects.get(id=user_id)
+
+		notifications = getNotifications(request.user)
+
+		my_fans = FollowRelation.objects.filter(user_hero=user_aim)
+		my_heros = FollowRelation.objects.filter(user_fan=user_aim)
+
+		news = []
+		events = Event.objects.filter(user=user_aim)
+		for event in events:
+			new_news = {}
+			new_news['event'] = event
+			comments = Comment.objects.filter(event=event)
+			new_news['comments'] = comments
+			news.append(new_news)
+
+		return render_to_response('myspace.html',
+			{
+				'news': news,
+				'user': user_aim,
+				'notifications': notifications,
+				'heros': my_heros,
+				'fans': my_fans,
+			}, context_instance=RequestContext(request))
+
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+
 
 ######################################################
 ##show a specific event
