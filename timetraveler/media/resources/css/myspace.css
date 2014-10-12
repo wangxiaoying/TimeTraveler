@@ -31,3 +31,10 @@ input[readonly] {
 .signature-style {
   color: #694E4E;
 }
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 1px solid #eee;
+}

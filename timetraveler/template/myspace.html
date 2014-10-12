@@ -10,14 +10,14 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-md-2 col-md-offset-1">
-		<a data-toggle="modal" data-target="#upload-portrait">
+	<div class="col-md-2 col-md-offset-1" align="center">
+		<div data-toggle="modal" data-target="#upload-portrait">
 			{% if profile.portrait %}
-			<img  style="width:200px; height:200px" src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded"/>
+			<img height="200" width="200" src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded"/>
 			{% else %}
-			<img  style="width:200px; height:200px" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"/>
+			<img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"/>
 			{% endif %}
-		</a>
+		</div>
 		<div class="caption" style="text-align:center">
 			<h3>{{ user.username }}</h3>
 			{% if profile.signature != "" %}
@@ -51,51 +51,67 @@
 			</div>
 		</div>
 
-
-		{% if news %}
+	{% if news %}
 		{% for n in news %}
-		<div class="list-group">
-			<div class="list-group-item">
-				<div class="row">
-					<div class="col-md-1">
-						{% if n.user_profile.portrait %}
-						<img src="/media/{{ n.user_profile.portrait.url}}" class="img-rounded" style="width:50px; height=50px" alt="..."/>
-						{% else %}
-						<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" style="width:50px; height=50px" alt="..."/>
-						{% endif %}
+			<div class="list-group">
+				<div class="list-group-item">
+					<div class="row">
+						<div class="col-md-1">
+							{% if n.event.user.userprofile.portrait %}
+							<img src="/media/{{ n.event.user.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+							{% else %}
+							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
+							{% endif %}
+						</div>
+						<div class="col-md-11">
+							<a href="#" style="padding-left:10px">{{ n.event.user.username }}</a>
+							{{ n.event.date|date:"Y-m-d"}}
+						</div>
 					</div>
-					<div class="col-md-10 event-title">
-						<a href="#">{{ n.event.user.username }}</a><br/>
-						<a href="#">{{ n.event.date|date:"Y-m-d" }}</a>
+					<h5>{{ n.event.text }}</h5>
+				</div>
+
+				{% if n.event.image_1.name != "" %}
+				<div class="list-group-item">
+					<img src="/media/{{ n.event.image_1.url }}" style="width:450px; height=450px" alt="..."/>
+				</div>
+				{% endif %}
+
+				<div id="comment-list-{{ n.event.id }}" class="list-group-item" style="display:{% if n.comments %}block{% else %} none {% endif %}">
+					{% for c in n.comments %}
+					{% if not forloop.first %}
+					<hr>
+					{% endif %}
+					<div class="row">
+						<div class="col-md-1">
+							{% if c.user.userprofile.portrait %}
+							<img src="/media/{{ c.user.userprofile.portrait.url }}" alt="..." class="img-rounded" height="40" width="40" />
+							{% else %}
+							<img src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded" height="40" width:"40"/>
+							{% endif %}
+						</div>
+						<div class="col-md-11">
+							<a href="#" style="padding-left:10px">{{ c.user.username }}</a>
+							<span style"padding-left:10px">{{ c.date|date:"Y-m-d"}}</span>
+							<p style="padding-left: 10px">{{ c.comment }}</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+
+				<div class="list-group-item">
+					<div class="input-group">
+						<input id="comment-{{ n.event.id }}" type="text" class="form-control" placeholder="我的评论~" required="true">
+						<span class="input-group-btn">
+							<button id="do-comment" onclick="do_comment({{n.event.id}})" class="btn btn-default btn-primary" type="button">评论</button>
+						</span>
 					</div>
 				</div>
-				<h5>{{ n.event.text }}</h5>
 			</div>
-			{% if n.event.image_1.name != "" %}
-			<div class="list-group-item">
-				<img src="/media/{{ n.event.image_1.url }}" style="width:450px; height=450px" alt="..."/>
-			</div>
-			{% endif %}
-			{% if comments %}
-			<div class="list-group-item">
-				{% for c in n.comments %}
-				<hr/><p>{{ c.user.username }}: {{ c.comment }}</p>
-				{% endfor %}
-			</div>
-			{% endif %}
-			<div class="list-group-item">
-				<div class="input-group">
-					<input id="comment" type="text" class="form-control" placeholder="我的评论~" required="true">
-					<span class="input-group-btn">
-						<button id="do-comment" onclick="do_comment({{n.event.id}})" class="btn btn-default btn-primary" type="button">评论</button>
-					</span>
-				</div>
-			</div>
-		</div>
 		{% endfor %}
-		{% else %}
+	{% else %}
 		<h3>没有任何新鲜事</h3>
-		{% endif %}
+	{% endif %}
 
 	</div>
 </div>

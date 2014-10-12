@@ -8,12 +8,14 @@ from django.template import RequestContext
 
 import time
 from datetime import datetime
+import simplejson
 
 from user.models import *
 from user.views import *
 from event.models import *
 from timecapsule.models import *
 from event.forms import *
+from utils import *
 
 ######################################################
 ##create new event
@@ -54,15 +56,32 @@ def createEvent(request):
 ##create new comment
 @csrf_exempt
 def createComment(request):
+	response = {}
 	try:
-		print ('aa')
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+		text = request.POST.get('text')
+		event_id = request.POST.get('event_id')
+
+		event = Event.objects.get(id=event_id)
+		
+		comment = Comment(user=request.user, event=event, comment=text)
+		comment.save()
+
+		response['result'] = 'success'
+		response['comment'] = comment.comment
+		response['username'] = request.user.username
+		if request.user.userprofile.portrait:
+			response['portrait'] = request.user.userprofile.portrait.url
+		else:
+			response['portrait'] = getDefaultPortrait()
+		response['date'] = comment.date.strftime('%Y-%m-%d')
+
+		return HttpResponse(simplejson.dumps(response))
+
 	except Exception as e:
 		print(e)
-		return render_to_response('message.html',
-			{
-				'message': '服务器错误',
-				'url': '/event/myspace'
-			})
+		response['result'] = 'fail'
 
 ######################################################
 ##show myspace
@@ -101,6 +120,7 @@ def myspace(request):
 				'heros': my_heros,
 				'fans': my_fans,
 			}, context_instance=RequestContext(request))
+
 	except Exception as e:
 		print(e)
 		return render_to_response('message.html',
