@@ -10,22 +10,35 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-md-2 col-md-offset-1" align="center">
-		<div data-toggle="modal" data-target="#upload-portrait">
+	<div class="col-md-2 col-md-offset-1">
+		<div data-toggle="modal" data-target="#upload-portrait" data-tooltip="tooltip" title="点击更换图片" style="cursor: pointer;">
 			{% if profile.portrait %}
-			<img height="200" width="200" src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded"/>
+			<img height="200" width="200" src="/media/{{ profile.portrait.url }}" alt="..." class="img-rounded">
 			{% else %}
-			<img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"/>
+			<img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded">
 			{% endif %}
 		</div>
-		<div class="caption" style="text-align:center">
-			<h3>{{ user.username }}</h3>
+		<div class="caption">
+			<p class="mcard-name">{{ user.username }}</p>
+			<hr class="mcard-hr">
 			{% if profile.signature != "" %}
-			<p class="signature-style">- {{ profile.signature }} -</p>
+			<p class="signature-style">{{ profile.signature }}</p>
 			{% endif %}
-			<p>共发布: {{ my_events|length }}</p>
-			<p>正在关注: {{ heros|length }}</p>
-			<p>关注者: {{ fans|length }}</p>
+			<hr class="mcard-hr">
+			<div class="row mcard-board">
+				<div class="col-md-4">
+					<strong class="mcard-count">{{ my_events|length }}</strong>
+					<span class="text-muted">记录</span>
+				</div>
+				<div class="col-md-4">
+					<strong class="mcard-count">{{ heros|length }}</strong>
+					<span class="text-muted">关注</span>
+				</div>
+				<div class="col-md-4">
+					<strong class="mcard-count">{{ fans|length }}</strong>
+					<span class="text-muted">被关</span>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-7 col-md-offset-1">

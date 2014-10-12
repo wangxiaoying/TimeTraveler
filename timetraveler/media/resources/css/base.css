@@ -22,3 +22,7 @@
 body {
 	background-color: #e9eaed;
 }
+
+.text-muted {
+	color: #999;
+}

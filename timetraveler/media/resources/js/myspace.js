@@ -51,6 +51,7 @@ $(document).ready( function() {
 			do_comment(event_id);
 		}
 	})
+
 });
 
 
