@@ -29,7 +29,6 @@ class Comment(models.Model):
 	event = models.ForeignKey(Event)
 	comment = models.CharField(max_length=200)
 	date = models.DateTimeField(auto_now_add=True)
-	has_seen = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return self.comment
@@ -38,7 +37,6 @@ class Like(models.Model):
 	user = models.ForeignKey(User)
 	event = models.ForeignKey(Event)
 	cancel = models.BooleanField(default=False)
-	has_seen = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return ('user: %s likes event: %d' % (self.user.username, self.event.id))

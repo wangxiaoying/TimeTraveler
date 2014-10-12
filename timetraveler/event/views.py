@@ -76,6 +76,19 @@ def createComment(request):
 			response['portrait'] = getDefaultPortrait()
 		response['date'] = comment.date.strftime('%Y-%m-%d')
 
+		#create notifications
+		message = '%s于%s对您发言过的时间碎片做了评论~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
+		user_to = Comment.objects.filter(event=event).values('user').distinct()
+
+		for u in user_to:
+			if u is not request.user:
+				new_noti = Notification(user=u, event=event, message=message)
+				new_noti.save()
+
+		message0 = '%s于%s对您发布的时间碎片做了评论~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
+		new_noti = Notification(user=event.user, event=event, message=message)
+		new_noti.save()
+
 		return HttpResponse(simplejson.dumps(response))
 
 	except Exception as e:

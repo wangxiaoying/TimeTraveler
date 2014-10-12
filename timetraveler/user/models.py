@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from event.models import *
+
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	gender = models.BooleanField(default=False)
@@ -27,3 +29,13 @@ class Message(models.Model):
 
 	def __unicode__(self):
 		return self.message
+
+class Notification(models.Model):
+	user = models.ForeignKey(User)
+	event = models.ForeignKey(Event)
+	message = models.CharField(max_length=200)
+	has_seen = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return self.message
+

@@ -180,6 +180,14 @@ def getNotifications(user):
 		new_noti['origin_id'] = tc.id
 		notifications.append(new_noti)
 
+	noti_comlike = Notification.objects.filter(user=user, has_seen=False)
+	for cl in noti_comlike:
+		new_noti = {}
+		new_noti['message'] = cl.message
+		new_noti['type'] = 'CL'
+		new_noti['origin_id'] = cl.event.id
+		notifications.append(new_noti)
+
 	return notifications
 
 
