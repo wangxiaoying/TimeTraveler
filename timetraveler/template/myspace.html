@@ -53,10 +53,10 @@
 						<hr/><p>{{ c.user.username }}: {{ c.comment }}</p>
 						{% endfor %}
 						<div class="form-group">
-							<textarea name="comment" class="form-control" rows="1" placeholder="我的评论~" require="true"></textarea>
+							<textarea id="comment" name="comment" class="form-control" rows="1" placeholder="我的评论~" require="true"></textarea>
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-default btn-primary">评论</button></br>
+							<button id="do-comment" type="submit" class="btn btn-default btn-primary" onclick="do_comment()">评论</button></br>
 						</div>
 					</div>
 				</li>

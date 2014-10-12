@@ -54,6 +54,7 @@ def createEvent(request):
 @csrf_exempt
 def createComment(request):
 	try:
+		
 	except Exception as e:
 		print(e)
 		return render_to_response('message.html',
