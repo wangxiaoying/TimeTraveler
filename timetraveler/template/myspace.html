@@ -101,9 +101,9 @@
 
 				<div class="list-group-item">
 					<div class="input-group">
-						<input id="comment-{{ n.event.id }}" type="text" class="form-control" placeholder="我的评论~" required="true">
+						<input id="comment-{{ n.event.id }}" type="text" class="form-control comment-input" placeholder="我的评论~" required="true">
 						<span class="input-group-btn">
-							<button id="do-comment" onclick="do_comment({{n.event.id}})" class="btn btn-default btn-primary" type="button">评论</button>
+							<button onclick="do_comment({{n.event.id}})" class="btn btn-default btn-primary" type="button">评论</button>
 						</span>
 					</div>
 				</div>
