@@ -7,12 +7,14 @@ from django.contrib import auth
 
 import time
 from datetime import datetime
+import simplejson
 
 from user.models import *
 from user.views import *
 from event.models import *
 from timecapsule.models import *
 from event.forms import *
+from utils import *
 
 ######################################################
 ##create new event
@@ -53,15 +55,32 @@ def createEvent(request):
 ##create new comment
 @csrf_exempt
 def createComment(request):
+	response = {}
 	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+		text = request.POST.get('text')
+		event_id = request.POST.get('event_id')
+
+		event = Event.objects.get(id=event_id)
 		
+		comment = Comment(user=request.user, event=event, comment=text)
+		comment.save()
+
+		response['result'] = 'success'
+		response['comment'] = comment.comment
+		response['username'] = request.user.username
+		if request.user.userprofile.portrait:
+			response['portrait'] = request.user.userprofile.portrait
+		else:
+			response['portrait'] = getDefaultPortrait()
+		response['date'] = comment.date.strftime('%Y-%m-%d')
+
+		return HttpResponse(simplejson.dumps(response))
+
 	except Exception as e:
 		print(e)
-		return render_to_response('message.html',
-			{
-				'message': '服务器错误',
-				'url': '/event/myspace'
-			})
+		response['result'] = 'fail'
 
 ######################################################
 ##show myspace
@@ -72,15 +91,12 @@ def myspace(request):
 			return HttpResponseRedirect('/user/index')
 
 		notifications = getNotifications(request.user)
-		profile = UserProfile.objects.get(user=request.user)
 
 		news = []
-		events = Event.objects.all()
+		events = Event.objects.all().order_by('-date')
 		for event in events:
 			new_news = {}
 			new_news['event'] = event
-			profile = UserProfile.objects.get(user=event.user)
-			new_news['user_profile'] = profile
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
 			news.append(new_news)
@@ -91,7 +107,6 @@ def myspace(request):
 				'news': news, 
 				'user': request.user, 
 				'notifications': notifications,
-				'profile': profile
 			})
 	except Exception as e:
 		print(e)

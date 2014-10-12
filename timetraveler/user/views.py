@@ -13,6 +13,7 @@ from datetime import datetime
 
 from user.models import *
 from timecapsule.models import *
+from utils import *
 
 ######################################################
 ##login & register & logout
@@ -180,10 +181,6 @@ def getNotifications(user):
 		notifications.append(new_noti)
 
 	return notifications
-
-
-
-
 
 
 
