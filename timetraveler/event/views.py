@@ -109,7 +109,9 @@ def myspace(request):
 		if not request.user.is_authenticated():
 			return HttpResponseRedirect('/user/index')
 
-		notifications = getNotifications(request.user)
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
 
 		news = []
 		events = Event.objects.all().order_by('-date')
@@ -123,14 +125,18 @@ def myspace(request):
 			new_news['comments'] = comments
 			news.append(new_news)
 
+		print("what's wrong")
+
 		my_fans = FollowRelation.objects.filter(user_hero=request.user)
 		my_heros = FollowRelation.objects.filter(user_fan=request.user)
 
 		return render_to_response('myspace.html', 
 			{
+				'me': request.user,
 				'news': news, 
 				'user': request.user, 
 				'notifications': notifications,
+				'new_followers': new_followers,
 				'my_events': my_events,
 				'heros': my_heros,
 				'fans': my_fans,
@@ -152,7 +158,9 @@ def homepage(request):
 		user_id = request.GET.get('user_id')
 		user_aim = User.objects.get(id=user_id)
 
-		notifications = getNotifications(request.user)
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
 
 		my_fans = FollowRelation.objects.filter(user_hero=user_aim)
 		my_heros = FollowRelation.objects.filter(user_fan=user_aim)
@@ -168,9 +176,11 @@ def homepage(request):
 
 		return render_to_response('myspace.html',
 			{
+				'me': request.user,
 				'news': news,
 				'user': user_aim,
 				'notifications': notifications,
+				'new_followers': new_followers,
 				'heros': my_heros,
 				'fans': my_fans,
 			}, context_instance=RequestContext(request))
@@ -202,12 +212,17 @@ def showEvent(request):
 		news['comments'] = comments
 
 		Notification.objects.filter(event=event, user=request.user).update(has_seen=True)
-		notifications = getNotifications(request.user)
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
 
 		return render_to_response('showevent.html',
 			{
+				'me': request.user,
 				'news': news,
 				'notifications': notifications,
+				'new_followers': new_followers,
 				'user': request.user
 			})
 

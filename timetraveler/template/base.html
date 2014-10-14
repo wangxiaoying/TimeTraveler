@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="/media/resources/bootstrap/css/bootstrap-theme.min.css">
 	<script type="text/javascript" src="/media/resources/js/jquery/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="/media/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/media/resources/js/base.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/media/resources/css/base.css">
 	
@@ -35,9 +36,32 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right" style="margin-right:10px">
 				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">朋友
+						{% if new_followers %}
+						<span id="newf-count" class="badge">{{ new_followers|length }}</span>
+						<span class="caret"></span>
+						{% endif %}
+					</a>
+					{% if new_followers %}
+					<ul class="dropdown-menu" role="menu">
+						{% for nf in new_followers %}
+						<li id="newfo-list-{{ nf.origin_id }}" rol="presentation">
+							{% if nf.follower.userprofile.portrait %}
+							<img src="/media/{{ nf.follower.userprofile.portrait.url }}" alt="..." class="img-rounded" height="40" width="40"/>
+							{% else %}
+							<img src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded" height="40" width:"40"/>
+							{% endif %}
+							<a href="/event/homepage?user_id={{ nf.follower.id }}" onclick="click_know_nf({{ nf.origin_id }})">{{ nf.follower.username }}</a>关注了你
+							<button id="nf_known" class="btn btn-default btn-primary" type="button" onclick="click_know_nf({{ nf.origin_id }})">确认</button>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</li>
+				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">通知
-						<span id="noti-count" class="badge">{{ notifications|length }}</span>
 						{% if notifications %}
+						<span id="noti-count" class="badge">{{ notifications|length }}</span>
 						<span class="caret"></span>
 						{% endif %}
 					</a>
@@ -54,7 +78,7 @@
 					{% endif %}
 
 				</li>
-				<li><a href="/user/profile">{{ user.username }}</a></li>
+				<li><a href="/user/profile">{{ me.username }}</a></li>
 				<li><a href="/user/logout">LogOut</a></li>
 			</ul>
 		</div>

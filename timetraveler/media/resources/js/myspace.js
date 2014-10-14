@@ -37,55 +37,120 @@ function do_comment(event_id){
 	});
 }
 
+var status = "";
+
 function set_relation_btn(user_id){
-
-	console.log("hehehe");
-
 	$.ajax({
 		url: "/user/getrelation",
 		type: "POST",
 		data: {"user_id": user_id},
 		success: function(d, s, j){
 			var json = $.parseJSON(d);
-			console.log(json.relation)
 			if(json.result == "success"){
 				if(json.relation == "myself"){
-					console.log("hahas")
+					status = "change_password";
 					$("#btn_relation").text("更改密码");
 					$("#btn_relation").addClass("btn-primary");
 				}
 				else if(json.relation == "friend" || json.relation == "hero"){
-					
-					$("#btn_relation").mouseover(
-						function(){
-							$("#btn_relation").text("取消关注");
-							$("#btn_relation").removeClass("btn-success");
-							$("#btn_relation").addClass("btn-danger");
-						}
-					);
-					$("#btn_relation").mouseout(
-						function(){
-							$("#btn_relation").text("正在关注");
-							$("#btn_relation").removeClass("btn-danger");
-							$("#btn_relation").addClass("btn-success");
-						}
-					);
+					status = "following";
+					$("#btn_relation").text("正在关注");
+					$("#btn_relation").removeClass("btn-danger");
+					$("#btn_relation").addClass("btn-success");					
 				}	
 				else{
+					status="dofollow";
 					$("#btn_relation").text("+关注");
 					$("#btn_relation").addClass("btn-info");
 				}
+
+				$("#btn_relation").mouseover(
+					function(){
+						if(status == "following"){
+						status = "unfollow";
+						$("#btn_relation").text("取消关注");
+						$("#btn_relation").removeClass("btn-success");
+						$("#btn_relation").addClass("btn-danger");
+						}
+					}
+				);
+				$("#btn_relation").mouseout(
+					function(){
+						if(status == "unfollow"){
+						status = "following";
+						$("#btn_relation").text("正在关注");
+						$("#btn_relation").removeClass("btn-danger");
+						$("#btn_relation").addClass("btn-success");
+						}
+					}
+				);
 			}
 			else{
 				alert("服务器错误");
 			}
-
 		},
 		error: function(j, s, e){
-			console.log(e)
+			console.log(e);
 		}
 	});
 }
+
+function click_relation_btn(user_id){
+
+	var text = $("#btn_relation").text();
+	if(status == "change_password"){
+		console.log("change password")
+	}
+	else if(status == "unfollow"){
+		$.ajax({
+			url: "/user/unfollow",
+			type: "POST",
+			data: {"hero_id": user_id},
+			success: function(d, s, j){
+				var json = $.parseJSON(d);
+				if(json.result == "success"){
+					status = "dofollow";
+					$("#btn_relation").text("+关注");
+					$("#btn_relation").removeClass("btn-danger");
+					$("#btn_relation").addClass("btn-info");
+					var fan_len = parseInt($("#fan_len").html());
+					$("#fan_len").html(fan_len - 1);
+				}
+				else{
+					alert("服务器错误");
+				}
+			},
+			error: function(j, s, e){
+				console.log(e);
+			}
+		});
+	}
+	else{
+		$.ajax({
+			url: "/user/follow",
+			type: "POST",
+			data: {"hero_id": user_id},
+			success: function(d, s, j){
+				var json = $.parseJSON(d);
+				if(json.result == "success"){
+					status = "unfollow";
+					$("#btn_relation").text("取消关注");
+					$("#btn_relation").removeClass("btn-info");
+					$("#btn_relation").addClass("btn-danger");
+					var fan_len = parseInt($("#fan_len").html());
+					$("#fan_len").html(fan_len + 1);
+				}
+				else{
+					alert("服务器错误");
+				}
+			},
+			error: function(j, s, e){
+				console.log(e);
+			}
+		});
+	}
+}
+
 
 $(document).ready( function() {
 

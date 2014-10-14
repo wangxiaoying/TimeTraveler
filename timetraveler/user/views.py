@@ -154,13 +154,33 @@ def getRelationship(request):
 		relation_2 = FollowRelation.objects.filter(user_hero=user_aim, user_fan=request.user)
 
 		if len(relation_1) > 0 and len(relation_2) > 0:
-			response['relation'] = 'fiend'
+			response['relation'] = 'friend'
 		elif len(relation_2) > 0:
 			response['relation'] = 'hero'
 		elif len(relation_1) > 0:
 			response['relation'] = 'fan'
 		else:
 			response['relation'] = 'na'
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
+
+	except Exception as e:
+		print(e)
+		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
+
+######################################################
+##has seen new followers
+@csrf_exempt
+def seenNewFollower(request):
+	response = {}
+	try:
+		nf_id = request.POST.get('nf_id')
+
+		new_fo_relation = FollowRelation.objects.get(id=nf_id)
+		new_fo_relation.has_seen = True
+		new_fo_relation.save()
+
 		response['result'] = 'success'
 		return HttpResponse(simplejson.dumps(response))
 
@@ -204,10 +224,24 @@ def uploadPortrait(request):
 					'url': '/'
 				})
 
+######################################################
+##search user
+def searchUser(user):
+	try:
+	except Exception as e:
+		print (e)
+		return render_to_response('message.html',
+				{
+					'message': '服务器错误',
+					'url': '/'
+				})
+
 
 ######################################################
 ##get notifications
 def getNotifications(user):
+	response = {}
+
 	now = datetime.now()
 	notifications = []
 	# noti_follow = FollowRelation.objects.filter(user_hero=request.user, have_seen=False)
@@ -228,7 +262,21 @@ def getNotifications(user):
 		new_noti['origin_id'] = cl.event.id
 		notifications.append(new_noti)
 
-	return notifications
+	response['notifications'] = notifications
+
+	noti_followers = []
+	new_fs = FollowRelation.objects.filter(user_hero=user, has_seen=False)
+	for fr in new_fs:
+		new_fo = {}
+		new_fo['origin_id'] = fr.id
+		new_fo['follower'] = fr.user_fan
+		noti_followers.append(new_fo)
+
+	response['new_followers'] = noti_followers
+
+	return response
+
+
 
 
 

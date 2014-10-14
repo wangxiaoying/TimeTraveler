@@ -70,12 +70,17 @@ def createTimeCapsule(request):
 def mySouvenir(request):
 	try:
 		capsules = TimeCapsule.objects.filter(user_to=request.user, has_seen=True)
-		notifications = getNotifications(request.user)
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
 
 		return render_to_response('mysouvenir.html',
 			{
+				'me': request.user,
 				'capsules': capsules,
 				'notifications': notifications,
+				'new_followers': new_followers,
 				'user': request.user
 			})
 
@@ -108,12 +113,16 @@ def showTimeCapsule(request):
 		capsule.has_seen = True
 		capsule.save()
 
-		notifications = getNotifications(request.user)
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
 
 		return render_to_response('showtimecapsule.html',
 			{
+				'me': request.user,
 				'capsule': capsule,
 				'notifications': notifications,
+				'new_followers': new_followers,
 				'user': request.user
 			})
 

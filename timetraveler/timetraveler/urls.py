@@ -19,6 +19,9 @@ user_patterns = patterns('user.views',
 	url(r'^user/logout$', 'logout'),
 
 	url(r'^user/getrelation$', 'getRelationship'),
+	url(r'^user/follow$', 'follow'),
+	url(r'^user/unfollow$', 'unfollow'),
+	url(r'^user/seennewfo$', 'seenNewFollower'),
 )
 
 event_patterns = patterns('event.views',
