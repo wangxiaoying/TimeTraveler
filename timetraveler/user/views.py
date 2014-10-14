@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.template import RequestContext
+from django.db.models import Q
 
 import simplejson
 import hashlib
@@ -208,32 +209,48 @@ def uploadPortrait(request):
 			return render_to_response('message.html',
 				{
 					'message': '头像更改成功',
-					'url': '/'
+					'url': '/event/myspace'
 				})
 
 		return render_to_response('message.html',
 				{
 					'message': '头像上传失败',
-					'url': '/'
+					'url': '/event/myspace'
 				})
 	except Exception as e:
 		print (e)
 		return render_to_response('message.html',
 				{
 					'message': '服务器错误',
-					'url': '/'
+					'url': '/event/myspace'
 				})
 
 ######################################################
 ##search user
-def searchUser(user):
+def searchUser(request):
 	try:
+		key_word = request.POST('search_key_word')
+
+		users = User.objects.filter(Q(username__icontains=key_word)|Q(email__icontains=keyword))
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
+
+		return render_to_response('userlist.html',
+			{
+				'users': users,
+				'me': request.user,
+				'notifications': notifications,
+				'new_followers': new_followers
+			})
+		
 	except Exception as e:
 		print (e)
 		return render_to_response('message.html',
 				{
 					'message': '服务器错误',
-					'url': '/'
+					'url': '/event/myspace'
 				})
 
 

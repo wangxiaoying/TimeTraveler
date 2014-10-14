@@ -113,8 +113,12 @@ def myspace(request):
 		notifications = notis['notifications']
 		new_followers = notis['new_followers']
 
+		users = FollowRelation.objects.filter(user_fan=request.user).values('user_hero')
+		# users.append(request.user)
+
 		news = []
-		events = Event.objects.all().order_by('-date')
+		# events = Event.objects.all().order_by('-date')
+		events = Event.objects.filter(Q(user__in=users)|Q(user=request.user)).order_by('-date')
 		my_events = []
 		for event in events:
 			if event.user == request.user:
@@ -124,8 +128,6 @@ def myspace(request):
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
 			news.append(new_news)
-
-		print("what's wrong")
 
 		my_fans = FollowRelation.objects.filter(user_hero=request.user)
 		my_heros = FollowRelation.objects.filter(user_fan=request.user)

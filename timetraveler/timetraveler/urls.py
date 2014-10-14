@@ -22,6 +22,8 @@ user_patterns = patterns('user.views',
 	url(r'^user/follow$', 'follow'),
 	url(r'^user/unfollow$', 'unfollow'),
 	url(r'^user/seennewfo$', 'seenNewFollower'),
+
+	url(r'^user/search$', 'searchUser'),
 )
 
 event_patterns = patterns('event.views',

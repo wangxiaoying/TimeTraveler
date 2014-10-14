@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/media/resources/css/myspace.css">
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="/media/resources/js/myspace.js"></script>
+{% endblock %}
+
+{% block body %}
+<body>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div>
+			{% if users %}
+			<div class="list-group">
+				{% for u in users %}
+				<div class="list-group-item">
+					<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+					<a href="/event/homepage?userid={{ u.id }}">{{ u.username }}</a>
+					<button id="btn_relation" class="btn btn-default btn-block" type="button" onclick="click_relation_btn({{ user.id }})"></button>
+					
+				</div>
+				{% endfor %}
+			</div>
+			{% else %}
+			<h3>没有搜到任何用户</h3>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
