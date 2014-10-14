@@ -183,6 +183,7 @@ def homepage(request):
 				'user': user_aim,
 				'notifications': notifications,
 				'new_followers': new_followers,
+				'my_events': events,
 				'heros': my_heros,
 				'fans': my_fans,
 			}, context_instance=RequestContext(request))

@@ -192,7 +192,6 @@ def seenNewFollower(request):
 
 ######################################################
 ## upload portrait
-
 @csrf_exempt
 def uploadPortrait(request):
 	try:
@@ -227,11 +226,12 @@ def uploadPortrait(request):
 
 ######################################################
 ##search user
+@csrf_exempt
 def searchUser(request):
 	try:
-		key_word = request.POST('search_key_word')
+		key_word = request.POST.get('search_key_word').strip()
 
-		users = User.objects.filter(Q(username__icontains=key_word)|Q(email__icontains=keyword))
+		users = User.objects.filter(Q(username__icontains=key_word)|Q(email__icontains=key_word))
 
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']
@@ -253,6 +253,67 @@ def searchUser(request):
 					'url': '/event/myspace'
 				})
 
+######################################################
+##get user fans
+@csrf_exempt
+def getFans(request):
+	try:
+		user_id = request.GET.get('user_id')
+
+		user_aim = User.objects.get(id=user_id)
+
+		users_id = FollowRelation.objects.filter(user_hero=user_aim).values('user_fan')
+		users = User.objects.filter(id__in=users_id)
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
+
+		return render_to_response('userlist.html',
+			{
+				'users': users,
+				'me': request.user,
+				'notifications': notifications,
+				'new_followers': new_followers
+			})
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+######################################################
+##get user heros
+@csrf_exempt
+def getHeros(request):
+	try:
+		user_id = request.GET.get('user_id')
+
+		user_aim = User.objects.get(id=user_id)
+
+		users_id = FollowRelation.objects.filter(user_fan=user_aim).values('user_hero')
+		users = User.objects.filter(id__in=users_id)
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
+
+		return render_to_response('userlist.html',
+			{
+				'users': users,
+				'me': request.user,
+				'notifications': notifications,
+				'new_followers': new_followers
+			})
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
 
 ######################################################
 ##get notifications

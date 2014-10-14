@@ -15,11 +15,11 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-2 col-md-offset-1">
-		<div data-toggle="modal" data-target="#upload-portrait" data-tooltip="tooltip" title="点击更换图片" style="cursor: pointer;">
+		<div data-toggle="modal" data-target="#upload-portrait">
 			{% if user.userprofile.portrait %}
-			<img height="200" width="200" src="/media/{{ user.userprofile.portrait.url }}" alt="..." class="img-rounded">
+			<a data-toggle="tooltip" data-placement="left" title="Tooltip on ha"><img height="200" width="200" src="/media/{{ user.userprofile.portrait.url }}" alt="..." class="img-rounded"></a>
 			{% else %}
-			<img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded">
+			<a data-toggle="tooltip" data-placement="left" title="Tooltip on ha"><img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"></a>
 			{% endif %}
 		</div>
 		<div class="caption">
@@ -27,19 +27,21 @@
 			<hr class="mcard-hr">
 			{% if user.userprofile.signature != "" %}
 			<p class="signature-style">{{ user.userprofile.signature }}</p>
+			{% else %}
+			<p class="signature-style">TA很懒，什么都没有写</p>
 			{% endif %}
 			<hr class="mcard-hr">
 			<div class="row mcard-board">
 				<div class="col-md-4">
-					<strong class="mcard-count">{{ my_events|length }}</strong>
+					<a href="/event/homepage?user_id={{ user.id }}"><strong class="mcard-count">{{ my_events|length }}</strong></a>
 					<span class="text-muted">记录</span>
 				</div>
 				<div class="col-md-4">
-					<strong class="mcard-count">{{ heros|length }}</strong>
+					<a href="/user/getheros?user_id={{ user.id }}"><strong class="mcard-count">{{ heros|length }}</strong></a>
 					<span class="text-muted">关注</span>
 				</div>
 				<div class="col-md-4">
-					<strong id="fan_len" class="mcard-count">{{ fans|length }}</strong>
+					<a href="/user/getfans?user_id={{ user.id }}"><strong id="fan_len" class="mcard-count">{{ fans|length }}</strong></a>
 					<span class="text-muted">被关</span>
 				</div>
 			</div>

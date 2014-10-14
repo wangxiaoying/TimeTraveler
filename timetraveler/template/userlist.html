@@ -22,9 +22,17 @@
 				{% for u in users %}
 				<div class="list-group-item">
 					<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
-					<a href="/event/homepage?userid={{ u.id }}">{{ u.username }}</a>
-					<button id="btn_relation" class="btn btn-default btn-block" type="button" onclick="click_relation_btn({{ user.id }})"></button>
-					
+					<a href="/event/homepage?user_id={{ u.id }}">{{ u.username }}</a>
+					{% if u.userprofile.gender %}
+					<span>女</span>
+					{% else %}
+					<span>男</span>
+					{% endif %}	
+					{% if u.userprofile.signature != "" %}
+					<span>{{ u.userprofile.signature }}</span>
+					{% else %}		
+					<span>TA很懒，什么都没有写</span>		
+					{% endif %}
 				</div>
 				{% endfor %}
 			</div>
