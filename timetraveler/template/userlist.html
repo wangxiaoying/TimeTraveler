@@ -21,7 +21,11 @@
 			<div class="list-group">
 				{% for u in users %}
 				<div class="list-group-item">
+					{% if u.userprofile.portrait.name != "" %}
 					<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+					{% else %}
+					<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
+					{% endif %}
 					<a href="/event/homepage?user_id={{ u.id }}">{{ u.username }}</a>
 					{% if u.userprofile.gender %}
 					<span>女</span>
