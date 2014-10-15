@@ -25,6 +25,8 @@
 		<div class="caption">
 			<p class="mcard-name">{{ user.username }}</p>
 			<hr class="mcard-hr">
+			<p class="signature-style">{{ user.email }}</p>
+			<p class="signature-style">{{ user.date_joined|date:"Y-m-d" }}加入</p>
 			{% if user.userprofile.signature != "" %}
 			<p class="signature-style">{{ user.userprofile.signature }}</p>
 			{% else %}
