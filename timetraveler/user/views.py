@@ -191,7 +191,39 @@ def seenNewFollower(request):
 		return HttpResponse(simplejson.dumps(response))
 
 ######################################################
-## upload portrait
+##change password
+@csrf_exempt
+def changePassword(request):
+	try:
+		old_password = request.POST.get('old_password')
+		new_password = request.POST.get('new_password')
+
+		if request.user.check_password(old_password) is False:
+			return render_to_response('message.html',
+				{
+					'message': '密码错误，重置失败',
+					'url': '/event/myspace'
+				})
+
+		request.user.set_password(new_password)
+		request.user.save()
+
+		return render_to_response('message.html',
+			{
+				'message': '密码更改成功',
+				'url': '/event/myspace'
+
+			})
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+				{
+					'message': '服务器错误',
+					'url': '/event/myspace'
+				})
+
+######################################################
+##upload portrait
 @csrf_exempt
 def uploadPortrait(request):
 	try:

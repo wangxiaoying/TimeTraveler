@@ -99,7 +99,7 @@ function click_relation_btn(user_id){
 
 	var text = $("#btn_relation").text();
 	if(status == "change_password"){
-		console.log("change password")
+		$("#change-password").modal("show");
 	}
 	else if(status == "unfollow"){
 		$.ajax({

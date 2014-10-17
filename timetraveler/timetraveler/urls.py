@@ -26,6 +26,8 @@ user_patterns = patterns('user.views',
 	url(r'^user/search$', 'searchUser'),
 	url(r'^user/getfans$', 'getFans'),
 	url(r'^user/getheros$', 'getHeros'),
+
+	url(r'^user/changepassword$', 'changePassword'),
 )
 
 event_patterns = patterns('event.views',
