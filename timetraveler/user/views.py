@@ -294,8 +294,7 @@ def getFans(request):
 
 		user_aim = User.objects.get(id=user_id)
 
-		users_id = FollowRelation.objects.filter(user_hero=user_aim).values('user_fan')
-		users = User.objects.filter(id__in=users_id)
+		users = getMyFans(user_aim)
 
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']
@@ -325,8 +324,7 @@ def getHeros(request):
 
 		user_aim = User.objects.get(id=user_id)
 
-		users_id = FollowRelation.objects.filter(user_fan=user_aim).values('user_hero')
-		users = User.objects.filter(id__in=users_id)
+		users = getMyHeros(user_aim)
 
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']
@@ -346,6 +344,44 @@ def getHeros(request):
 				'message': '服务器错误',
 				'url': '/event/myspace'
 			})
+
+######################################################
+##get recommend friends
+def getRecoFriends(user):
+	reco_users = {}
+	temp_users = []
+
+	heros = getMyHeros(user)
+	for h in heros:
+		h_h = getMyHeros(h)
+		temp_users = temp_users + list(h_h)
+
+	#temp = {}.fromkeys(temp_users).keys()
+	temp = set(temp_users) - set(getMyHeros(user))
+	temp.remove(user)
+
+	for t in temp:
+		reco_users[t] = temp_users.count(t)
+
+	result = sorted(reco_users.items(), key=lambda d:d[1], reverse = True)
+	return result
+
+def getMyFans(user):
+	fans_id = FollowRelation.objects.filter(user_hero=user).values('user_fan')
+	fans = User.objects.filter(id__in=fans_id)
+	return fans
+
+def getMyHeros(user):
+	heros_id = FollowRelation.objects.filter(user_fan=user).values('user_hero')
+	heros = User.objects.filter(id__in=heros_id)
+	return heros
+
+def getMyFriends(user):
+	heros_id = FollowRelation.objects.filter(user_fan=user).values('user_hero')
+	fans_id = FollowRelation.objects.filter(user_hero=user).values('user_fan')
+	friends_id = list(set(heros).intersection(set(fans)))
+	friends = User.objects.filter(id__in=friends_id)
+	return friends
 
 ######################################################
 ##get notifications

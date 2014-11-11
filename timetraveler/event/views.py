@@ -176,6 +176,12 @@ def homepage(request):
 			new_news['comments'] = comments
 			news.append(new_news)
 
+		reco_friends = getRecoFriends(request.user)
+		print(type(reco_friends))
+		for rf in reco_friends:
+			print(type(rf))
+			print(rf)
+
 		return render_to_response('myspace.html',
 			{
 				'me': request.user,
@@ -186,6 +192,7 @@ def homepage(request):
 				'my_events': events,
 				'heros': my_heros,
 				'fans': my_fans,
+				'reco_friends': reco_friends,
 			}, context_instance=RequestContext(request))
 
 	except Exception as e:
