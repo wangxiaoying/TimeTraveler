@@ -14,3 +14,4 @@ class TimeCapsule(models.Model):
 	text = models.CharField(max_length=200)
 	image = models.FileField(upload_to=timecapsule_file)
 	has_seen = models.BooleanField(default=False)
+	has_pushed = models.BooleanField(default=False)

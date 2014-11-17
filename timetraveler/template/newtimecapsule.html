@@ -2,6 +2,7 @@
 
 {% block css %} 
 	<link href="/media/resources/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" type="text/css" href="/media/resources/css/newtimecapsule.css">
 	<link rel="stylesheet" type="text/css" href="/media/resources/css/jquery-ui.css">
 {% endblock %}
 
@@ -9,6 +10,7 @@
 	<script type="text/javascript" src="/media/resources/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="/media/resources/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="/media/resources/js/jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="/media/resources/js/newtimecapsule.js"></script>
 {% endblock %}
 
 
@@ -25,36 +27,89 @@
 				<textarea name="text" class="form-control" rows="5" placeholder="我想对那时的我说~" require="true"></textarea>
 			</div>
 			<div class="form-group">
+				<span class="file-input btn btn-info btn-file">
 				<input type="file" name="capsule" require="true"/>
+				选取图片<span></span></span>	
 			</div>
-			<div class="form-group">
-				<label for="dtp_input2" class="col-md-2 control-label">Date Picking</label>
-                <div class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+			<div class="form-group text-center">
+                <label for="dtp_input1" class="col-md-2 control-label">设置时间</label>
+                <div class="input-group date form_datetime col-md-7" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
-				<input type="hidden" id="dtp_input2" value="" name="date-to"/><br/>			
-			</div>
+				<input type="hidden" id="dtp_input1" value="" name="date-to"/><br/>
+            </div>
+            <div class="form-group">
+            	<label class="col-md-2">接受者</label>
+            	<div class="col-md-10">
+            		<button class="btn btn-default btn-primary" id="btn-choose-friend">从朋友里选择</button>
+            		<button class="btn btn-default btn-primary" id="btn-choose-myself">给自己</button><hr/>
+            		<form class="form-inline" role="form" method="POST" action="/user/search">
+            			<div class="form-group"><input name="receive_person" id="search-rp" type="text" class="form-control" placeholder="请输入用户名或邮箱"></div>
+            			<div class="form-group"><button type="submit" class="btn btn-default btn-primary">搜索</button></div>
+            		</form>
+            	</div>
+            </div>
 			<div class="form-group">
 				<button type="submit" class="btn btn-default btn-primary">创建</button></br>
 			</div>
 		</form>
 	</div>
 
+	<div class="modal fade" id="rp-list" aria-hidden="true" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel">接受者候选人</h4>
+			</div>
+			<div class="modal-body">
+				{% if user_list %}
+				<div class="list-group">
+					{% for u in user_list %}
+					<div class="list-group-item">
+						{% if u.userprofile.portrait.name != "" %}
+						<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+						{% else %}
+						<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
+						{% endif %}
+						<a href="/event/homepage?user_id={{ u.id }}">{{ u.username }}</a>
+						{% if u.userprofile.gender %}
+						<span>女</span>
+						{% else %}
+						<span>男</span>
+						{% endif %}	
+						{% if u.userprofile.signature != "" %}
+						<span>{{ u.userprofile.signature }}</span>
+						{% else %}		
+						<span>TA很懒，什么都没有写</span>		
+						{% endif %}
+					</div>
+					{% endfor %}
+				</div>
+				{% else %}
+			<h3>没有搜到任何用户</h3>
+			{% endif %}
+		</div>
+			</div>
+
+		</div>
+	</div>
+</div>
 	
 	<script type="text/javascript">
-	$('.form_date').datetimepicker({
+	$('.form_datetime').datetimepicker({
         language:  'zh-CN',
         weekStart: 1,
         todayBtn:  1,
 		autoclose: 1,
 		todayHighlight: 1,
 		startView: 2,
-		minView: 2,
-		forceParse: 0
+		forceParse: 0,
+        showMeridian: 1
     });
-    $('.form_date').datetimepicker('setStartDate', new Date());
+    $('.form_datetime').datetimepicker('setStartDate', new Date());
 </script>
 
 {% endblock %}

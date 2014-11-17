@@ -8,17 +8,17 @@
 
 	<div class="row">
 		<div class="col-md-3 col-md-offset-1 thumbnail" style="text-align:center">
-			<img src="/media/photos/timecapsule.jpg" style="width:300px; height=300px" alt="..." class="img-thumbnail" href="/timecapsule/new">
-			<h4>创建一个时间囊</h4>
+			<img src="/media/photos/timecapsule.jpg" style="width:300px; height=300px" alt="..." class="img-thumbnail" href="/timecapsule/new"><br/>
+			<h4>创建一个时间囊</h4><br/>
 			<a href="/timecapsule/new" class="btn btn-default btn-primary">创建</a>
 		</div>
 	{% if capsules%}
 		{% for capsule in capsules %}
 		<div class="col-md-3 col-md-offset-1 thumbnail" style="text-align:center">
-			<img src="/media/{{ capsule.image.url }}" style="width:300px; height=300px" alt="..." class="img-thumbnail" href="/timecapsule/show?id={{ capsule.id }}">
+			<img src="/media/{{ capsule.user_from.userprofile.portrait.url }}" style="width:300px; height=300px" alt="..." class="img-thumbnail" href="/timecapsule/show?id={{ capsule.id }}">
 			<h5>来自：{{ capsule.user_from.username }}</h5>
-			<h5>埋下日期：{{ capsule.time_start|date:"Y年m月d日" }}</h5>
-			<h5>挖出日期：{{ capsule.time_end|date:"Y年m月d日" }}</h5>
+			<h5>埋下日期：{{ capsule.time_start|date:"Y年m月d日 H:m" }}</h5>
+			<h5>挖出日期：{{ capsule.time_end|date:"Y年m月d日 H:m" }}</h5>
 			<a href="/timecapsule/show?id={{ capsule.id }}" class="btn btn-default btn-primary">打开</a>
 		</div>
 		{% endfor %}

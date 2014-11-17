@@ -47,6 +47,8 @@ timecapsule_patterns = patterns('timecapsule.views',
 	url(r'^timecapsule/mysouvenir$', 'mySouvenir'),
 	
 	url(r'^timecapsule/show$', 'showTimeCapsule'),
+
+	url(r'^timecapsule/check$', 'checkTimeCapsule'),
 )
 
 urlpatterns = patterns('',

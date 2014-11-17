@@ -74,6 +74,8 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
+# USE_TZ = False
+
 TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True

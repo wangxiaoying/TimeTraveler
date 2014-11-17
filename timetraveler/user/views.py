@@ -11,6 +11,7 @@ import simplejson
 import hashlib
 import time
 from datetime import datetime
+from datetime import timezone
 
 from user.models import *
 from user.forms import *
@@ -391,11 +392,15 @@ def getNotifications(user):
 	now = datetime.now()
 	notifications = []
 	# noti_follow = FollowRelation.objects.filter(user_hero=request.user, have_seen=False)
-	noti_timecapsule = TimeCapsule.objects.filter(user_to=user, time_end__lt=now, has_seen=False)
+	noti_timecapsule = TimeCapsule.objects.filter(user_to=user, time_end__lt=now, has_seen=False, has_pushed=True)
 
 	for tc in noti_timecapsule:
 		new_noti = {}
-		new_noti['message'] = '%s于%s送给你了一个时间囊~' % (tc.user_from.username, tc.time_end.strftime('%y年%m月%d日'))
+		print('##################')
+		print(tc.time_end)
+		print(tc.time_end.replace(tzinfo=timezone.utc).astimezone(tz=None))
+		print('##################')
+		new_noti['message'] = '%s于%s送给你了一个时间囊~' % (tc.user_from.username, tc.time_end.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S'))
 		new_noti['type'] = 'TC'
 		new_noti['origin_id'] = tc.id
 		notifications.append(new_noti)
