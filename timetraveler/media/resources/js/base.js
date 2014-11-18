@@ -46,5 +46,5 @@ function checkTimeCapsule(){
 }
 
 $(document).ready(function(){
-	setInterval("checkTimeCapsule()", 1000);
+	setInterval("checkTimeCapsule()", 5000);
 })

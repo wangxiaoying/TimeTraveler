@@ -32,7 +32,9 @@ def createTimeCapsule(request):
 		
 
 		text = request.POST.get('text')
-		user_to_id = request.POST.get('user_to')
+		user_to_id = request.POST.get('user-to')
+
+		print('hahaha', user_to_id)
 
 		if user_to_id is None:
 			user_to = request.user
@@ -110,7 +112,7 @@ def showTimeCapsule(request):
 		capsule_id = request.GET.get('id')
 		capsule = TimeCapsule.objects.get(id=capsule_id)
 
-		if not request.user.id is capsule.user_to.id:
+		if request.user.id is not capsule.user_to.id or capsule.has_pushed is False:
 			return render_to_response('message.html',
 				{
 					'message': '您没有权限访问该时间囊',
@@ -118,6 +120,7 @@ def showTimeCapsule(request):
 				})
 
 		capsule.has_seen = True
+		capsule.has_pushed = True
 		capsule.save()
 
 		notis = getNotifications(request.user)

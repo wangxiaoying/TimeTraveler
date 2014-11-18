@@ -262,9 +262,7 @@ def uploadPortrait(request):
 @csrf_exempt
 def searchUser(request):
 	try:
-		key_word = request.POST.get('search_key_word').strip()
-
-		users = User.objects.filter(Q(username__icontains=key_word)|Q(email__icontains=key_word))
+		users = searchUserByKeyword(request.POST.get('search_key_word'))
 
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']
@@ -380,8 +378,11 @@ def getMyHeros(user):
 def getMyFriends(user):
 	heros_id = FollowRelation.objects.filter(user_fan=user).values('user_hero')
 	fans_id = FollowRelation.objects.filter(user_hero=user).values('user_fan')
-	friends_id = list(set(heros).intersection(set(fans)))
-	friends = User.objects.filter(id__in=friends_id)
+
+	heros = User.objects.filter(id__in=heros_id)
+	fans = User.objects.filter(id__in=fans_id)
+
+	friends = heros & fans
 	return friends
 
 ######################################################
@@ -391,15 +392,10 @@ def getNotifications(user):
 
 	now = datetime.now()
 	notifications = []
-	# noti_follow = FollowRelation.objects.filter(user_hero=request.user, have_seen=False)
-	noti_timecapsule = TimeCapsule.objects.filter(user_to=user, time_end__lt=now, has_seen=False, has_pushed=True)
 
+	noti_timecapsule = TimeCapsule.objects.filter(user_to=user, has_seen=False, has_pushed=True)
 	for tc in noti_timecapsule:
 		new_noti = {}
-		print('##################')
-		print(tc.time_end)
-		print(tc.time_end.replace(tzinfo=timezone.utc).astimezone(tz=None))
-		print('##################')
 		new_noti['message'] = '%s于%s送给你了一个时间囊~' % (tc.user_from.username, tc.time_end.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S'))
 		new_noti['type'] = 'TC'
 		new_noti['origin_id'] = tc.id
@@ -427,7 +423,62 @@ def getNotifications(user):
 
 	return response
 
+######################################################
+##search user by keywords
+def searchUserByKeyword(keyword):
+	print(keyword)
+	if keyword is None:
+		return None
+	key_word = keyword.strip()
+	users = User.objects.filter(Q(username__icontains=key_word)|Q(email__icontains=key_word))
+	return users
 
+######################################################
+##get user by id
+@csrf_exempt
+def getUserById(request):
+	response = {}
+	try:
+		user_id = request.POST.get('user_id')
+		user = User.objects.get(id=user_id)
+
+		response['username'] = user.username
+		response['portrait'] = user.userprofile.portrait.url
+
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
+	except Exception as e:
+		print(e)
+		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
+
+
+######################################################
+##get user list for timecapsule reciever
+@csrf_exempt
+def getUserList(request):
+	response = {}
+	try:
+		users = []
+		who = request.POST.get('who')
+		if who == '1':
+			user_list = getMyFriends(request.user)
+		elif who == '0':
+			user_list = searchUserByKeyword(request.POST.get('keyword'))
+		
+		for f in user_list:
+			temp = {}
+			temp['user_id'] = f.id
+			temp['username'] = f.username
+			temp['portrait'] = f.userprofile.portrait.url
+			users.append(temp);
+		response['users'] = users
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
+	except Exception as e:
+		print(e)
+		response['reuslt'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
 
 
 
