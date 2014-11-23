@@ -36,7 +36,7 @@ class Comment(models.Model):
 class Like(models.Model):
 	user = models.ForeignKey(User)
 	event = models.ForeignKey(Event)
-	cancel = models.BooleanField(default=False)
+	is_canceled = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return ('user: %s likes event: %d' % (self.user.username, self.event.id))

@@ -89,9 +89,18 @@
 							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
 							{% endif %}
 						</div>
-						<div class="col-md-10 event-title">
+						<div class="col-md-9 event-title">
 							<p><a href="/event/homepage?user_id={{ n.event.user.id }}">{{ n.event.user.username }}</a></p>
 							<p><a href="/event/show?id={{ n.event.id }}">{{ n.event.date|date:"Y-m-d"}}</a></p>
+						</div>
+						<div class="col-md-1">
+							{% if n.like %}
+							<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ n.event.id }})" id="like-event-{{ n.event.id }}" style="display: block"/>
+							<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ n.event.id }})" id="nolike-event-{{ n.event.id }}" style="display: none"/>
+							{% else %}
+							<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ n.event.id }})" id="like-event-{{ n.event.id }}" style="display: none"/>
+							<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ n.event.id }})" id="nolike-event-{{ n.event.id }}" style="display: block"/>
+							{% endif %}
 						</div>
 					</div>
 					<h5>{{ n.event.text }}</h5>
@@ -204,18 +213,5 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% endblock %}

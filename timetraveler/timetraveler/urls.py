@@ -41,6 +41,9 @@ event_patterns = patterns('event.views',
 	url(r'^event/show$', 'showEvent'),
 
 	url(r'^event/newcomment$', 'createComment'),
+
+	url(r'^event/like$', 'likeEvent'),
+	url(r'^event/cancellike$', 'cancelLikeEvent'),
 )
 
 timecapsule_patterns = patterns('timecapsule.views',

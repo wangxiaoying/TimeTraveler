@@ -1,3 +1,45 @@
+function like(event_id){
+	$.ajax({
+		url: "/event/like",
+		type: "POST",
+		data: {"event_id": event_id},
+		success: function(d, s, j){
+			var json = $.parseJSON(d);
+			if(json.result == "success"){
+				console.log($("#like-event-" + event_id))
+				$("#like-event-" + event_id).css("display", "block");
+				$("#nolike-event-" + event_id).css("display", "none");
+			}else{
+				alert("服务器错误");
+			}
+		},
+		error: function(j, s, e){
+			console.log(e);
+		}
+	});
+}
+
+function cancelLike(event_id){
+	$.ajax({
+		url: "/event/cancellike",
+		type: "POST",
+		data: {"event_id": event_id},
+		success: function(d, s, j){
+			var json = $.parseJSON(d);
+			if(json.result == "success"){
+				console.log($("#nolike-event-" + event_id))
+				$("#like-event-" + event_id).css("display", "none");
+				$("#nolike-event-" + event_id).css("display", "block");
+			}else{
+				alert("服务器错误");
+			}
+		},
+		error: function(j, s, e){
+			console.log(e);
+		}
+	})
+}
+
 function do_comment(event_id){
 	var text = $("#comment-"+event_id).val();
 	if(text == ""){

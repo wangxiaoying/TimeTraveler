@@ -89,7 +89,6 @@ def createComment(request):
 				new_noti.save()
 
 		if request.user != event.user:
-			print('haha not me')
 			message0 = '%s于%s对评论了您的时间碎片~' % (request.user.username, comment.date.strftime('%y年%m月%d日'))
 			new_noti = Notification(user=event.user, event=event, message=message0)
 			new_noti.save()
@@ -127,6 +126,11 @@ def myspace(request):
 			new_news['event'] = event
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
+			like, created = Like.objects.get_or_create(user=request.user, event=event)
+			if created:
+				like.is_canceled = True
+				like.save()
+			new_news['like'] = not like.is_canceled
 			news.append(new_news)
 
 		my_fans = FollowRelation.objects.filter(user_hero=request.user)
@@ -245,9 +249,59 @@ def showEvent(request):
 			})
 
 
+######################################################
+##like a event
+@csrf_exempt
+def likeEvent(request):
+	response = {}
+	try:
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
 
+		event_id = request.POST.get('event_id')
+		event = Event.objects.get(id=event_id)
+		
+		like, created = Like.objects.get_or_create(user=request.user, event=event)
+		if not created:
+			like.is_canceled = False
+			like.save()
+		print(like.is_canceled)
+		print('like')
 
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
 
+	except Exception as e:
+		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
+
+######################################################
+##cancel like a event
+@csrf_exempt
+def cancelLikeEvent(request):
+	response = {}
+	try:
+		print('cancle')
+		if not request.user.is_authenticated():
+			return HttpResponseRedirect('/user/index')
+
+		event_id = request.POST.get('event_id')
+		event = Event.objects.get(id=event_id)
+
+		like = Like.objects.get(user=request.user, event=event)
+		like.is_canceled = True
+		like.save()
+
+		
+		print(like.is_canceled)
+
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
+
+	except Exception as e:
+		print(e)
+		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
 
 
 
