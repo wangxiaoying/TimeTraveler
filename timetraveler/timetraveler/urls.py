@@ -31,6 +31,8 @@ user_patterns = patterns('user.views',
 
 	url(r'^user/getbyid$', 'getUserById'),
 	url(r'^user/getuserlist$', 'getUserList'),
+
+	url(r'^user/myalbum$', 'myAlbum'),
 )
 
 event_patterns = patterns('event.views',

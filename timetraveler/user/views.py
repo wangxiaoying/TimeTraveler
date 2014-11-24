@@ -481,7 +481,17 @@ def getUserList(request):
 		return HttpResponse(simplejson.dumps(response))
 
 
-
+######################################################
+##go to my album
+@csrf_exempt
+def myAlbum(request):
+	if request.user.is_authenticated():
+		return render_to_response('myalbum.html', 
+			{
+				'me': request.user
+			})
+	else:
+		return render_to_response('login.html', context_instance=RequestContext(request))
 
 
 
