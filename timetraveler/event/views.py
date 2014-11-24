@@ -178,6 +178,11 @@ def homepage(request):
 			new_news['event'] = event
 			comments = Comment.objects.filter(event=event)
 			new_news['comments'] = comments
+			like, created = Like.objects.get_or_create(user=request.user, event=event)
+			if created:
+				like.is_canceled = True
+				like.save()
+			new_news['like'] = not like.is_canceled
 			news.append(new_news)
 
 		reco_friends = getRecoFriends(request.user)
@@ -220,10 +225,15 @@ def showEvent(request):
 		event_id = request.GET.get('id')
 		event = Event.objects.get(id=event_id)
 		comments = Comment.objects.filter(event=event)
+		like, created = Like.objects.get_or_create(user=request.user, event=event)
+		if created:
+			like.is_canceled = True
+			like.save()
 
 		news = {}
 		news['event'] = event
 		news['comments'] = comments
+		news['like'] = not like.is_canceled
 
 		Notification.objects.filter(event=event, user=request.user).update(has_seen=True)
 
@@ -260,11 +270,12 @@ def likeEvent(request):
 
 		event_id = request.POST.get('event_id')
 		event = Event.objects.get(id=event_id)
+		print(event_id)
 		
-		like, created = Like.objects.get_or_create(user=request.user, event=event)
-		if not created:
-			like.is_canceled = False
-			like.save()
+		like = Like.objects.get(user=request.user, event=event)
+		like.is_canceled = False
+		like.save()
+
 		print(like.is_canceled)
 		print('like')
 
