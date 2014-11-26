@@ -33,6 +33,8 @@ user_patterns = patterns('user.views',
 	url(r'^user/getuserlist$', 'getUserList'),
 
 	url(r'^user/myalbum$', 'myAlbum'),
+	url(r'^user/resendemail$', 'resendEmail'),
+	url(r'^user/confirmemail$', 'confirmEmail'),
 )
 
 event_patterns = patterns('event.views',

@@ -12,6 +12,10 @@ class UserProfile(models.Model):
 	def __unicode__(self):
 		return self.user.username
 
+class UserToken(models.Model):
+	user = models.OneToOneField(User)
+	token = models.CharField(max_length=200)
+
 class FollowRelation(models.Model):
 	user_hero = models.ForeignKey(User, related_name='user_hero')
 	user_fan = models.ForeignKey(User, related_name='user_fan')

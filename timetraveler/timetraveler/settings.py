@@ -91,3 +91,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'template'))
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# DEFAULT_FROM_EMAIL = 'momotimetraveler@163.com'
+# SERVER_EMAIL = 'wangxiaoying0369@gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 57
+# EMAIL_HOST_USER = 'momotimetraveler@163.com'
+# EMAIL_HOST_PASSWORD = 'timetraveler'
+
+

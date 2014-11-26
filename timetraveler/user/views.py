@@ -6,7 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.template import RequestContext
 from django.db.models import Q
+# from django.core.mail import send_mail
 
+import smtplib
+from email.mime.text import MIMEText  
+from email.header import Header  
+
+import random, string
 import simplejson
 import hashlib
 import time
@@ -33,6 +39,16 @@ def login(request):
 	try:
 		username = request.POST.get('username')
 		password = request.POST.get('password')
+
+		user = User.objects.get(username=username)
+		if user is not None and user.is_active is False:
+			return render_to_response('message.html', 
+				{
+					'message': '您还没有激活您的邮箱',
+					'url': '/user/index',
+					'user_id': user.id
+				})
+
 
 		user = auth.authenticate(username=username, password=password)
 
@@ -72,14 +88,21 @@ def register(request):
 		password = request.POST.get('password')
 
 		user = User.objects.create_user(username=username, email=email, password=password)
+		user.is_active = False
 		user.save()
+
+		token = makeToken(user.id)
+		user_token = UserToken.objects.create(user=user, token=token)
+		sendEmail(email, token)
 
 		user_profile = UserProfile.objects.create(user=user)
 		user_profile.save()
 
-		user = auth.authenticate(username=username, password=password)
-		auth.login(request, user)
-		return HttpResponseRedirect('/user/index')
+		return render_to_response('message.html', 
+				{
+					'message': '快去激活你的邮箱吧',
+					'url': '/user/index'
+				})
 
 	except Exception as e:
 		print(e)
@@ -92,6 +115,34 @@ def register(request):
 				})
 		else:
 			return render_to_response('message.html',
+				{
+					'message': '服务器错误',
+					'url': '/user/newuser'
+				})
+
+@csrf_exempt
+def confirmEmail(request):
+	try:
+		token = request.GET.get('token')
+		user_id = token.split(':')[0]
+		user = User.objects.get(id=user_id)
+
+		true_token = UserToken.objects.get(user=user)
+		if token == true_token.token:
+			user.is_active = True
+			user.save()
+			return HttpResponseRedirect('/user/index')
+		
+		return render_to_response('message.html',
+				{
+					'message': '该链接不存在或已过期',
+					'url': '/user/newuser'
+				})
+
+		
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
 				{
 					'message': '服务器错误',
 					'url': '/user/newuser'
@@ -494,6 +545,48 @@ def myAlbum(request):
 		return render_to_response('login.html', context_instance=RequestContext(request))
 
 
+######################################################
+##send email
+@csrf_exempt
+def resendEmail(request):
+	try:
+		user_id = request.GET.get('user_id')
+		
+		user = User.objects.get(id=user_id)
+		user_token = UserToken.objects.get(user=user)
 
+		user_token.token = makeToken(user.id)
+		user_token.save()
+		sendEmail(user.email, user_token.token)
+
+		return HttpResponseRedirect('/user/index')
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
+
+def sendEmail(email_to, token):
+	#Sign In  
+	subject = 'Time Traveler 账户激活'  
+	text = '<a href="http://localhost:8000/user/confirmemail?token='+ str(token) +'">请点此激活您在TimeTraveler的邮箱</a>'
+
+	# msg = MIMEText(text,'plain','utf-8')#中文需参数‘utf-8’，单字节字符不需要
+	msg = MIMEText(text,_subtype='html',_charset='gb2312')  
+	msg['Subject'] = Header(subject, 'utf-8')  
+
+	smtp = smtplib.SMTP()  
+	smtp.connect(SMTP_SERVER)  
+	smtp.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)  
+	smtp.sendmail(EMAIL_HOST_USER, email_to, msg.as_string())  
+	smtp.quit()
+
+
+######################################################
+##generate token
+def makeToken(key):
+   return str(key) + ':' + hashlib.md5(str(datetime.now()).encode('utf-8')).hexdigest()
 
 

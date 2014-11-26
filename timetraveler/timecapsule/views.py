@@ -78,7 +78,7 @@ def createTimeCapsule(request):
 @csrf_exempt
 def mySouvenir(request):
 	try:
-		capsules = TimeCapsule.objects.filter(user_to=request.user, has_pushed=True)
+		capsules = TimeCapsule.objects.filter(user_to=request.user, has_pushed=True).order_by('-time_end')
 
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']

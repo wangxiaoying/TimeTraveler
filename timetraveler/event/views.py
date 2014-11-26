@@ -333,7 +333,8 @@ def getMyPhotos(request):
 	return render_to_response('gallery.html',
 		{
 			'photos': photos,
-			'message': '你的相册还没有图片，快去发布新动态吧！'
+			'message': '你的相册还没有图片，快去发布新动态吧！',
+			'me': request.user
 		})
 
 @csrf_exempt
@@ -354,7 +355,8 @@ def getLikePhotos(request):
 	return render_to_response('gallery.html',
 		{
 			'photos': photos,
-			'message': '你喜欢的相册还是空的，快去给你喜欢的图片点个赞吧！'
+			'message': '你喜欢的相册还是空的，快去给你喜欢的图片点个赞吧！',
+			'me': request.user
 		})
 
 

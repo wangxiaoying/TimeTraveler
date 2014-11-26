@@ -12,6 +12,11 @@
 			<h1>{{ message }}</h1>
 			<p>按确认键返回继续</p>
 			<p><a class="btn btn-primary btn-lg " role="button" style="width:80px" href={{ url }}>确认</a></p>
+			{% if user_id %}
+			<p id="resend-email">
+				<a href="/user/resendemail?user_id={{ user_id }}">没有收到？点击此链接重新发送激活邮件</a>
+			</p>
+			{% endif %}
 		</div>
 	</div>
 </body>
