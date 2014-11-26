@@ -49,6 +49,7 @@ event_patterns = patterns('event.views',
 
 	url(r'^event/getmyphotos$', 'getMyPhotos'),
 	url(r'^event/getlikephotos$', 'getLikePhotos'),
+
 )
 
 timecapsule_patterns = patterns('timecapsule.views',

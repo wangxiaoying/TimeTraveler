@@ -230,13 +230,11 @@ def showEvent(request):
 			like.is_canceled = True
 			like.save()
 
-		print(not like.is_canceled)
 		news = {}
 		news['event'] = event
 		news['comments'] = comments
 		news['like'] = not like.is_canceled
 
-		print(news['like'])
 
 		Notification.objects.filter(event=event, user=request.user).update(has_seen=True)
 
@@ -260,7 +258,6 @@ def showEvent(request):
 				'message': '服务器错误',
 				'url': '/event/myspace'
 			})
-
 
 ######################################################
 ##like a event
