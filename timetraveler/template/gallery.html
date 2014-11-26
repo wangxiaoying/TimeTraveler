@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block js %}
+<script type="text/javascript" src="/media/resources/js/myspace.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/media/resources/css/myspace.css">
+{% endblock %}
+
+
+{% block body %}
+<body>
+{% endblock %}
+
+	{% block content %}
+
+	<div class="row">
+		{% if photos %}
+		{% for photo in photos %}
+		<div class="col-md-3 thumbnail" style="text-align:center">
+			<img src="/media/{{ photo.url }}" style="width:300px; height=300px" alt="..." class="img-thumbnail" onclick="showDetail({{ photo.id }})">
+		</div>
+		{% endfor %}
+		{% else %}
+		<h2>{{ message }}</h2>
+		{% endif %}
+	</div>
+
+
+	<div class="modal fade event-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="row">
+					<div class="col-md-8">
+						<img src="#">
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="col-md-1" align="center">
+									{% if news.event.user.userprofile.portrait %}
+									<img src="/media/{{ news.event.user.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+									{% else %}
+									<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
+									{% endif %}
+								</div>
+								<div class="col-md-9 event-title">
+									<p><a href="#">{{ news.event.user.username }}</a></p>
+									<p>{{ news.event.date|date:"Y-m-d"}}</p>
+								</div>
+								<div class="col-md-1">
+									{% if news.like %}
+									<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ news.event.id }})" id="like-event-{{ news.event.id }}" style="display: block"/>
+									<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ news.event.id }})" id="nolike-event-{{ news.event.id }}" style="display: none"/>
+									{% else %}
+									<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ news.event.id }})" id="like-event-{{ news.event.id }}" style="display: none"/>
+									<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ news.event.id }})" id="nolike-event-{{ news.event.id }}" style="display: block"/>
+									{% endif %}
+								</div>
+							</div>
+
+							<div id="comment-list-{{ news.event.id }}" class="list-group-item" style="display:{% if news.comments %}block{% else %} none {% endif %}">
+								{% for c in news.comments %}
+								{% if not forloop.first %}
+								<hr/>
+								{% endif %}
+								<div class="row">
+									<div class="col-md-1">
+										{% if c.user.userprofile.portrait %}
+										<img src="/media/{{ c.user.userprofile.portrait.url }}" alt="..." class="img-rounded" height="40" width="40"/>
+										{% else %}
+										<img src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded" height="40" width="40"/>
+										{% endif %}
+									</div>
+									<div class="col-md-11">
+										<a href="#" style="padding-left:10px">{{ c.user.username }}</a>
+										<span style"padding-left:10px" class="pull-right">{{ c.date|date:"Y-m-d"}}</span>
+										<p style="padding-left: 10px">{{ c.comment }}</p>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="list-group-item">
+								<div class="form-group">
+									<textarea id="comment-{{ news.event.id }}" name="comment" class="form-control" rows="3" placeholder="我的评论~" require="true"></textarea>
+								</div>
+								<div class="form-group">
+									<button id="do-comment" type="submit" class="btn btn-default btn-primary" onclick="do_comment({{ news.event.id }})">评论</button></br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	{% endblock %}

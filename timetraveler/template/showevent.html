@@ -28,7 +28,7 @@
 				<p>{{ news.event.date|date:"Y-m-d"}}</p>
 			</div>
 			<div class="col-md-1">
-				{% if news.event.like %}
+				{% if news.like %}
 				<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ news.event.id }})" id="like-event-{{ news.event.id }}" style="display: block"/>
 				<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ news.event.id }})" id="nolike-event-{{ news.event.id }}" style="display: none"/>
 				{% else %}

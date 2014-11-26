@@ -186,10 +186,10 @@ def homepage(request):
 			news.append(new_news)
 
 		reco_friends = getRecoFriends(request.user)
-		print(type(reco_friends))
-		for rf in reco_friends:
-			print(type(rf))
-			print(rf)
+		# print(type(reco_friends))
+		# for rf in reco_friends:
+		# 	print(type(rf))
+		# 	print(rf)
 
 		return render_to_response('myspace.html',
 			{
@@ -230,10 +230,13 @@ def showEvent(request):
 			like.is_canceled = True
 			like.save()
 
+		print(not like.is_canceled)
 		news = {}
 		news['event'] = event
 		news['comments'] = comments
 		news['like'] = not like.is_canceled
+
+		print(news['like'])
 
 		Notification.objects.filter(event=event, user=request.user).update(has_seen=True)
 
@@ -314,6 +317,48 @@ def cancelLikeEvent(request):
 		response['result'] = 'fail'
 		return HttpResponse(simplejson.dumps(response))
 
+######################################################
+##my album related
+@csrf_exempt
+def getMyPhotos(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/user/index')
+
+	photos = []
+	events = Event.objects.filter(user=request.user)
+	
+	for e in events:
+		temp = {}
+		temp['url'] = e.image_1.url
+		temp['id'] = e.id
+		photos.append(temp)
+
+	return render_to_response('gallery.html',
+		{
+			'photos': photos,
+			'message': '你的相册还没有图片，快去发布新动态吧！'
+		})
+
+@csrf_exempt
+def getLikePhotos(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/user/index')
+
+	photos = []
+	event_id = Like.objects.filter(user=request.user, is_canceled=False).values('event')
+	events = Event.objects.filter(id__in=event_id)
+
+	for e in events:
+		temp = {}
+		temp['url'] = e.image_1.url
+		temp['id'] = e.id
+		photos.append(temp)
+
+	return render_to_response('gallery.html',
+		{
+			'photos': photos,
+			'message': '你喜欢的相册还是空的，快去给你喜欢的图片点个赞吧！'
+		})
 
 
 
