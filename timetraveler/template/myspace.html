@@ -29,11 +29,23 @@
 			<p class="signature-style">{{ user.email }}</p>
 			<p class="signature-style">{{ user.date_joined|date:"Y-m-d" }}加入</p>
 			<hr class="mcard-hr">
+			<p class="signature-style" id="signature-text">
 			{% if user.userprofile.signature != "" %}
-			<p class="signature-style">{{ user.userprofile.signature }}</p>
+			{{ user.userprofile.signature }}
 			{% else %}
-			<p class="signature-style">TA很懒，什么都没有写</p>
+			TA很懒，什么都没有写
 			{% endif %}
+			{% if me.id == user.id %}
+			<span class="glyphicon glyphicon-pencil" onclick="editSignature()"></span>
+			{% endif %}
+			</p>
+			<div id="signature-edit" style="display: none">
+				<p class="signature-style">
+					<textarea id="edit-text" rows="3" style="width: 100%">{{ user.userprofile.signature }}</textarea>
+				</p>
+				<span class="glyphicon glyphicon-ok" onclick="confirmEdit()"></span>
+				<span class="glyphicon glyphicon-remove" onclick="cancelEdit()"></span>
+			</div>
 			<hr class="mcard-hr">
 			<div class="row mcard-board">
 				<div class="col-md-4">

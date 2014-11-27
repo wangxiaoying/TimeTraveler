@@ -583,6 +583,22 @@ def sendEmail(email_to, token):
 	smtp.sendmail(EMAIL_HOST_USER, email_to, msg.as_string())  
 	smtp.quit()
 
+######################################################
+##edit signature
+@csrf_exempt
+def editSignature(request):
+	response = {}
+	try:
+		signature = request.POST.get('signature')
+		request.user.userprofile.signature = signature
+		request.user.userprofile.save()
+
+		response['result'] = 'success'
+		return HttpResponse(simplejson.dumps(response))
+	except Exception as e:
+		print(e)
+		response['result'] = 'fail'
+		return HttpResponse(simplejson.dumps(response))
 
 ######################################################
 ##generate token

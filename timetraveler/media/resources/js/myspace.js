@@ -1,3 +1,40 @@
+function editSignature(){
+	$("#signature-text").css("display", "none");
+	$("#signature-edit").css("display", "block");
+}
+
+function cancelEdit(){
+	$("#signature-text").css("display", "block");
+	$("#signature-edit").css("display", "none");
+}
+
+function confirmEdit(){
+	text = $("#edit-text").val();
+	$.ajax({
+		url: "/user/editsignature",
+		type: "POST",
+		data: {"signature": text},
+		success: function(d, s, j){
+			var json = $.parseJSON(d);
+			if(json.result == "success"){
+				if(text == ""){
+					$("#signature-text").html('TA很懒，什么都没有写' + '<span class="glyphicon glyphicon-pencil" onclick="editSignature()"></span>');
+				}else{
+					$("#signature-text").html(text + '<span class="glyphicon glyphicon-pencil" onclick="editSignature()"></span>');
+				}
+				$("#signature-text").css("display", "block");
+				$("#signature-edit").css("display", "none");
+			}else{
+				alert("服务器错误");
+			}
+		},
+		error: function(j, s, e){
+			console.log(e);
+		}
+
+	});
+}
+
 function like(event_id){
 	$.ajax({
 		url: "/event/like",
