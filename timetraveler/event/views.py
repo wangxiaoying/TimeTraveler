@@ -40,10 +40,18 @@ def createEvent(request):
 
 		#pick up topics
 		temp_vec = text.split('#')
-		for i in range(1, len(temp_vec)-1):
+		new_text = ''
+		for i in range(0, len(temp_vec)-1):
 			if i % 2 is not 0 and temp_vec[i] is not '':
 				topic, created = Topic.objects.get_or_create(topic=temp_vec[i])
 				event_topic = EventTopic.objects.get_or_create(event=new_event, topic=topic)
+				new_text += '<a href="/event/topic?topic_id=' + str(topic.id) + '"">' + temp_vec[i] + '</a>#'
+			else:
+				new_text += temp_vec[i] + '#'
+		new_text += temp_vec[len(temp_vec)-1]
+		new_event.text = new_text
+		new_event.save()
+
 
 		return render_to_response('message.html',
 			{
