@@ -40,3 +40,22 @@ class Like(models.Model):
 
 	def __unicode__(self):
 		return ('user: %s likes event: %d' % (self.user.username, self.event.id))
+
+class Topic(models.Model):
+	topic = models.CharField(max_length=200)
+	date = models.DateTimeField(auto_now_add=True)
+
+	def __unicode__(self):
+		return self.topic
+
+class EventTopic(models.Model):
+	event = models.ForeignKey(Event)
+	topic = models.ForeignKey(Topic)
+
+	def __unicode__(self):
+		return ('event : %d - topic: %d' % (self.event.id, self.topic.id))
+
+
+
+
+

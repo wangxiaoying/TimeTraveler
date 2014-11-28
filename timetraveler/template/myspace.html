@@ -1,229 +1,27 @@
-{% extends "base.html" %}
+{% extends "myspace_basic.html" %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="/media/resources/css/myspace.css">
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript" src="/media/resources/js/myspace.js"></script>
-<script type="text/javascript" src="/media/resources/js/register.js"></script>
-{% endblock %}
-
-{% block body %}
-<body onload="set_relation_btn({{ user.id }})">
-{% endblock %}
-
-{% block content %}
-<div class="row">
-	<div class="col-md-2">
-		<div data-toggle="modal" data-target="#upload-portrait">
-			{% if user.userprofile.portrait %}
-			<a data-toggle="tooltip" data-placement="left" title="Tooltip on ha"><img height="200" width="200" src="/media/{{ user.userprofile.portrait.url }}" alt="..." class="img-rounded"></a>
-			{% else %}
-			<a data-toggle="tooltip" data-placement="left" title="Tooltip on ha"><img  height="200" width="200" src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded"></a>
-			{% endif %}
-		</div>
-		<div class="caption">
-			<p class="mcard-name">{{ user.username }}</p>
-			<hr class="mcard-hr">
-			<p class="signature-style">{{ user.email }}</p>
-			<p class="signature-style">{{ user.date_joined|date:"Y-m-d" }}加入</p>
-			<hr class="mcard-hr">
-			<p class="signature-style" id="signature-text">
-			{% if user.userprofile.signature != "" %}
-			{{ user.userprofile.signature }}
-			{% else %}
-			TA很懒，什么都没有写
-			{% endif %}
-			{% if me.id == user.id %}
-			<span class="glyphicon glyphicon-pencil" onclick="editSignature()"></span>
-			{% endif %}
-			</p>
-			<div id="signature-edit" style="display: none">
-				<p class="signature-style">
-					<textarea id="edit-text" rows="3" style="width: 100%">{{ user.userprofile.signature }}</textarea>
-				</p>
-				<span class="glyphicon glyphicon-ok" onclick="confirmEdit()"></span>
-				<span class="glyphicon glyphicon-remove" onclick="cancelEdit()"></span>
+{% block content-head %}
+{% if me.id == user.id %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
+			{% csrf_token %}
+			<div class="form-group">
+				<textarea name="text" class="form-control" rows="3" placeholder="我的新鲜事~" require="true"></textarea>
 			</div>
-			<hr class="mcard-hr">
-			<div class="row mcard-board">
-				<div class="col-md-4">
-					<a href="/event/homepage?user_id={{ user.id }}"><strong class="mcard-count">{{ my_events|length }}</strong></a>
-					<span class="text-muted">记录</span>
+			<div class="row">
+				<div class="col-md-6">
+					<span class="file-input btn btn-info btn-file">
+						选取图片 <input type="file" name="images">
+						<span></span>
+					</span>
 				</div>
-				<div class="col-md-4">
-					<a href="/user/getheros?user_id={{ user.id }}"><strong class="mcard-count">{{ heros|length }}</strong></a>
-					<span class="text-muted">关注</span>
-				</div>
-				<div class="col-md-4">
-					<a href="/user/getfans?user_id={{ user.id }}"><strong id="fan_len" class="mcard-count">{{ fans|length }}</strong></a>
-					<span class="text-muted">被关</span>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-default btn-primary pull-right">发布</button></br>
 				</div>
 			</div>
-			<button id="btn_relation" class="btn btn-default btn-block" type="button" onclick="click_relation_btn({{ user.id }})"></button>
-		</div>
-	</div>
-	<div class="col-md-7 col-md-offset-1">
-		{% if me.id == user.id %}
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<form role="form" method="POST" enctype="multipart/form-data" action="/event/create">
-					{% csrf_token %}
-					<div class="form-group">
-						<textarea name="text" class="form-control" rows="3" placeholder="我的新鲜事~" require="true"></textarea>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<span class="file-input btn btn-info btn-file">
-								选取图片 <input type="file" name="images">
-								<span></span>
-							</span>
-						</div>
-						<div class="col-md-6">
-							<button type="submit" class="btn btn-default btn-primary pull-right">发布</button></br>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-		{% endif %}
-
-	{% if news %}
-		{% for n in news %}
-			<div class="list-group">
-				<div class="list-group-item">
-					<div class="row">
-						<div class="col-md-1">
-							{% if n.event.user.userprofile.portrait %}
-							<img src="/media/{{ n.event.user.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
-							{% else %}
-							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
-							{% endif %}
-						</div>
-						<div class="col-md-9 event-title">
-							<p><a href="/event/homepage?user_id={{ n.event.user.id }}">{{ n.event.user.username }}</a></p>
-							<p><a href="/event/show?id={{ n.event.id }}">{{ n.event.date|date:"Y-m-d"}}</a></p>
-						</div>
-						<div class="col-md-1">
-							{% if n.like %}
-							<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ n.event.id }})" id="like-event-{{ n.event.id }}" style="display: block"/>
-							<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ n.event.id }})" id="nolike-event-{{ n.event.id }}" style="display: none"/>
-							{% else %}
-							<img src="/media/resources/images/like.png" class="img-rounded" height="30" width="30" alt="..." onclick="cancelLike({{ n.event.id }})" id="like-event-{{ n.event.id }}" style="display: none"/>
-							<img src="/media/resources/images/nolike.png" class="img-rounded" height="30" width="30" alt="..." onclick="like({{ n.event.id }})" id="nolike-event-{{ n.event.id }}" style="display: block"/>
-							{% endif %}
-						</div>
-					</div>
-					<h5>{{ n.event.text }}</h5>
-				</div>
-
-				{% if n.event.image_1.name != "" %}
-				<div class="list-group-item">
-					<img src="/media/{{ n.event.image_1.url }}" width="450" height="auto" style="max-width:100%" alt="..."/>
-				</div>
-				{% endif %}
-
-				<div id="comment-list-{{ n.event.id }}" class="list-group-item" style="display:{% if n.comments %}block{% else %} none {% endif %}">
-					{% for c in n.comments %}
-					{% if not forloop.first %}
-					<hr>
-					{% endif %}
-					<div class="row">
-						<div class="col-md-1">
-							{% if c.user.userprofile.portrait %}
-							<img src="/media/{{ c.user.userprofile.portrait.url }}" alt="..." class="img-rounded" height="40" width="40" />
-							{% else %}
-							<img src="/media/photos/portrait/avatar.jpg" alt="..." class="img-rounded" height="40" width:"40"/>
-							{% endif %}
-						</div>
-						<div class="col-md-11">
-							<a href="/event/homepage?user_id={{ c.user.id }}" style="padding-left:10px">{{ c.user.username }}</a>
-							<span style"padding-left:10px" class="pull-right">{{ c.date|date:"Y-m-d"}}</span>
-							<p style="padding-left: 10px">{{ c.comment }}</p>
-						</div>
-					</div>
-					{% endfor %}
-				</div>
-
-				<div class="list-group-item">
-					<div class="input-group">
-						<input id="comment-{{ n.event.id }}" type="text" class="form-control comment-input" placeholder="我的评论~" required="true">
-						<span class="input-group-btn">
-							<button onclick="do_comment({{n.event.id}})" class="btn btn-default btn-primary" type="button">评论</button>
-						</span>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-	{% else %}
-		<h3>没有任何新鲜事</h3>
-	{% endif %}
-
-	</div>
-	<div class="col-md-2">
-		<div class="list-group">
-  			<a href="#" class="list-group-item active">推荐关注</a>
-  			{% for rf, count in reco_friends %}
-  			<a href="/event/homepage?user_id={{ rf.id }}" class="list-group-item">{{ rf.username }}</a><span>你关注的{{ count }}人也在关注</span>
-  			{% endfor %}
-		</div>
+		</form>
 	</div>
 </div>
-
-<div class="modal fade" id="upload-portrait" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title" id="myModalLabel">上传头像</h4>
-			</div>
-			<div class="modal-body">
-
-				<form role="form" method="POST" enctype="multipart/form-data" action="/user/upload_portrait">
-					<div class="row">
-						<div class="col-md-6">
-							<span class="file-input btn btn-info btn-file">
-								选取头像 <input type="file" name="portrait">
-								<span></span>
-							</span>
-						</div>
-						<div class="col-md-6">
-							<button type="submit" class="btn btn-default btn-primary pull-right">上传</button></br>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="change-password" aria-hidden="true" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title" id="myModalLabel">更改密码</h4>
-			</div>
-			<div class="modal-body">
-				<form role="form" method="POST" enctype="multipart/form-data" action="/user/changepassword" onsubmit="return validate_password()">
-					<div class="form-group">
-						<input name="old_password" type="text" class="form-control" id="inputOldPassword" placeholder="请输入当前密码" required="true">
-					</div>
-					<div class="form-group">
-						<input name="new_password" type="text" class="form-control" id="registerInputPassword" placeholder="请输入更改后密码" required="true">
-					</div>
-					<div class="form-group">
-						<input name="new_password" type="text" class="form-control" id="registerInputPasswordConfirm" placeholder="请重新输入更改后密码" required="true" data-toggle="popover" data-content="密码必须一致" data-placement="bottom">
-					</div>												
-					<div class="form-group">
-						<button type="submit" class="btn btn-default btn-primary">提交</button></br>
-					</div>	
-				</form>
-			</div>
-
-		</div>
-	</div>
-</div>
-
+{% endif %}
 {% endblock %}

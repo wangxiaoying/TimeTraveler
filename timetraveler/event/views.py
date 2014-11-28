@@ -38,6 +38,13 @@ def createEvent(request):
 		new_event = Event(user=request.user, text=text, image_1=image_file)
 		new_event.save()
 
+		#pick up topics
+		temp_vec = text.split('#')
+		for i in range(1, len(temp_vec)-1):
+			if i % 2 is not 0 and temp_vec[i] is not '':
+				topic, created = Topic.objects.get_or_create(topic=temp_vec[i])
+				event_topic = EventTopic.objects.get_or_create(event=new_event, topic=topic)
+
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',
@@ -359,6 +366,56 @@ def getLikePhotos(request):
 			'me': request.user
 		})
 
+######################################################
+##show topic page
+@csrf_exempt
+def showTopicPage(request):
+	try:
+		topic_id = request.GET.get('topic_id')
+
+		topic = Topic.objects.get(id=topic_id)
+		event_ids = EventTopic.objects.filter(topic=topic).distinct().values('event')
+		events = Event.objects.filter(id__in=event_ids).order_by('-date')
+
+		news = []
+		for event in events:
+			new_news = {}
+			new_news['event'] = event
+			comments = Comment.objects.filter(event=event)
+			new_news['comments'] = comments
+			like, created = Like.objects.get_or_create(user=request.user, event=event)
+			if created:
+				like.is_canceled = True
+				like.save()
+			new_news['like'] = not like.is_canceled
+			news.append(new_news)
+
+		my_fans = FollowRelation.objects.filter(user_hero=request.user)
+		my_heros = FollowRelation.objects.filter(user_fan=request.user)
+
+		notis = getNotifications(request.user)
+		notifications = notis['notifications']
+		new_followers = notis['new_followers']
+
+		return render_to_response('topic.html',
+			{
+				'topic': topic.topic,
+				'me': request.user,
+				'news': news, 
+				'user': request.user, 
+				'notifications': notifications,
+				'new_followers': new_followers,
+				'heros': my_heros,
+				'fans': my_fans,
+			}, context_instance=RequestContext(request))
+
+	except Exception as e:
+		print(e)
+		return render_to_response('message.html',
+			{
+				'message': '服务器错误',
+				'url': '/event/myspace'
+			})
 
 
 
