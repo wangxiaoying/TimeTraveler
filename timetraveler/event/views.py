@@ -151,6 +151,9 @@ def myspace(request):
 		my_fans = FollowRelation.objects.filter(user_hero=request.user)
 		my_heros = FollowRelation.objects.filter(user_fan=request.user)
 
+		reco_friends = getRecoFriends(request.user)
+		reco_topics = getRecoTopics()
+
 		return render_to_response('myspace.html', 
 			{
 				'me': request.user,
@@ -158,6 +161,8 @@ def myspace(request):
 				'user': request.user, 
 				'notifications': notifications,
 				'new_followers': new_followers,
+				'reco_friends': reco_friends,
+				'reco_topics': reco_topics,
 				'my_events': my_events,
 				'heros': my_heros,
 				'fans': my_fans,
@@ -201,11 +206,8 @@ def homepage(request):
 			news.append(new_news)
 
 		reco_friends = getRecoFriends(request.user)
-		# print(type(reco_friends))
-		# for rf in reco_friends:
-		# 	print(type(rf))
-		# 	print(rf)
-
+		reco_topics = getRecoTopics()
+		
 		return render_to_response('myspace.html',
 			{
 				'me': request.user,
@@ -217,6 +219,7 @@ def homepage(request):
 				'heros': my_heros,
 				'fans': my_fans,
 				'reco_friends': reco_friends,
+				'reco_topics': reco_topics,
 			}, context_instance=RequestContext(request))
 
 	except Exception as e:
@@ -337,9 +340,11 @@ def getMyPhotos(request):
 		return HttpResponseRedirect('/user/index')
 
 	photos = []
-	events = Event.objects.filter(user=request.user)
+	events = Event.objects.filter(user=request.user).order_by('-date')
 	
 	for e in events:
+		if not e.image_1:
+			continue
 		temp = {}
 		temp['url'] = e.image_1.url
 		temp['id'] = e.id
@@ -404,6 +409,8 @@ def showTopicPage(request):
 		notis = getNotifications(request.user)
 		notifications = notis['notifications']
 		new_followers = notis['new_followers']
+		reco_topics = getRecoTopics()
+		reco_friends = getRecoFriends(request.user)
 
 		return render_to_response('topic.html',
 			{
@@ -413,6 +420,8 @@ def showTopicPage(request):
 				'user': request.user, 
 				'notifications': notifications,
 				'new_followers': new_followers,
+				'reco_friends': reco_friends,
+				'reco_topics': reco_topics,
 				'heros': my_heros,
 				'fans': my_fans,
 			}, context_instance=RequestContext(request))
@@ -424,8 +433,6 @@ def showTopicPage(request):
 				'message': '服务器错误',
 				'url': '/event/myspace'
 			})
-
-
 
 
 

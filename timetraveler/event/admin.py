@@ -37,6 +37,7 @@ class TopicAdmin(admin.ModelAdmin):
 	list_filter = ['date']
 	search_fields = ['topic']
 
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Topic, TopicAdmin)

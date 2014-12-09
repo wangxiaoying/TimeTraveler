@@ -414,6 +414,9 @@ def getRecoFriends(user):
 		reco_users[t] = temp_users.count(t)
 
 	result = sorted(reco_users.items(), key=lambda d:d[1], reverse = True)
+	if len(result) > 5:
+		result = result[0:5]
+
 	return result
 
 def getMyFans(user):
@@ -435,6 +438,25 @@ def getMyFriends(user):
 
 	friends = heros & fans
 	return friends
+
+######################################################
+##get recommend topics
+def getRecoTopics():
+	reco_topics = {}
+	temp_topics = []
+
+	topics = Topic.objects.all()
+	
+	for t in topics:
+		temp = EventTopic.objects.filter(topic=t)
+		reco_topics[t] = temp.count()
+
+	result = sorted(reco_topics.items(), key=lambda d:d[1], reverse = True)
+
+	if len(result) > 5:
+		result = result[0:5]
+
+	return result
 
 ######################################################
 ##get notifications

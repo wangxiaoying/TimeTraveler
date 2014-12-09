@@ -16,6 +16,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-2">
+		<div class="personal">
 		<div data-toggle="modal" data-target="#upload-portrait">
 			{% if user.userprofile.portrait %}
 			<a data-toggle="tooltip" data-placement="left" title="Tooltip on ha"><img height="200" width="200" src="/media/{{ user.userprofile.portrait.url }}" alt="..." class="img-rounded"></a>
@@ -62,6 +63,7 @@
 				</div>
 			</div>
 			<button id="btn_relation" class="btn btn-default btn-block" type="button" onclick="click_relation_btn({{ user.id }})"></button>
+		</div>
 		</div>
 	</div>
 	<div class="col-md-7 col-md-offset-1">
@@ -140,12 +142,21 @@
 	{% endif %}
 
 	</div>
+
 	<div class="col-md-2">
+		<div class="right-region">
 		<div class="list-group">
-  			<a href="#" class="list-group-item active">推荐关注</a>
-  			{% for rf, count in reco_friends %}
-  			<a href="/event/homepage?user_id={{ rf.id }}" class="list-group-item">{{ rf.username }}</a><span>你关注的{{ count }}人也在关注</span>
-  			{% endfor %}
+			<a href="#" class="list-group-item active">推荐关注</a>
+			{% for rf, count in reco_friends %}
+			<a href="/event/homepage?user_id={{ rf.id }}" class="list-group-item">{{ rf.username }}</a>
+			{% endfor %}
+		</div>
+		<div class="list-group">
+			<a href="#" class="list-group-item active">热门话题</a>
+			{% for rt, count in reco_topics %}
+			<a href="/event/topic?topic_id={{ rt.id }}" class="list-group-item">{{ rt.topic }}</a>
+			{% endfor %}
+		</div>
 		</div>
 	</div>
 </div>
