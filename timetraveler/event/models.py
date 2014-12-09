@@ -3,11 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Event(models.Model):
-
 	def image_file(self, filename):
 		url = 'images/users/%s/%s' % (self.user.username, filename)
 		return url
-
 	user = models.ForeignKey(User)
 	text = models.CharField(max_length=200)
 	image_1 = models.FileField(upload_to=image_file)
@@ -22,7 +20,7 @@ class Event(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return self.text
+		return 'id: %d | text: %s' % (self.id, self.text)
 
 class Comment(models.Model):
 	user = models.ForeignKey(User)
@@ -31,7 +29,7 @@ class Comment(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return self.comment
+		return 'id: %d | text: %s' % (self.id, self.comment)
 
 class Like(models.Model):
 	user = models.ForeignKey(User)

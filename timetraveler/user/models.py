@@ -22,7 +22,7 @@ class FollowRelation(models.Model):
 	has_seen = models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return ('user: %s follows user: %s' % (user_fan.username, user_hero.username))
+		return ('user: %s follows user: %s' % (self.user_fan, self.user_hero))
 
 class Message(models.Model):
 	user_from = models.ForeignKey(User, related_name='user_message_from')
