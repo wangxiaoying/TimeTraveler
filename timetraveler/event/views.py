@@ -52,6 +52,8 @@ def createEvent(request):
 		new_event.text = new_text
 		new_event.save()
 
+		request.user.userprofile.credits += 10
+		request.user.userprofile.save()
 
 		return render_to_response('message.html',
 			{
@@ -108,6 +110,8 @@ def createComment(request):
 			new_noti = Notification(user=event.user, event=event, message=message0)
 			new_noti.save()
 
+		request.user.userprofile.credits += 1
+		request.user.userprofile.save()
 		return HttpResponse(simplejson.dumps(response))
 
 	except Exception as e:
@@ -153,6 +157,8 @@ def myspace(request):
 
 		reco_friends = getRecoFriends(request.user)
 		reco_topics = getRecoTopics()
+
+
 
 		return render_to_response('myspace.html', 
 			{

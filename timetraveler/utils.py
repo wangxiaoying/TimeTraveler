@@ -4,3 +4,5 @@ def getDefaultPortrait():
 EMAIL_HOST_USER = 'momotimetraveler@163.com'
 EMAIL_HOST_PASSWORD = 'timetraveler'
 SMTP_SERVER = 'smtp.163.com'  
+
+WEBSITE_URL_BASE = 'http://localhost:8000'

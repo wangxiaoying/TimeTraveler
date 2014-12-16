@@ -27,14 +27,17 @@ def newTimeCapsule(request):
 @csrf_exempt
 def createTimeCapsule(request):
 	try:
-		u = User.objects.all()[0]
-		print (u.id, u.username)
+		if request.user.userprofile.credits < 10:
+			return render_to_response('message.html',
+				{
+					'message': '你的积分不足，快去发布新状态吧！',
+					'url': '/timecapsule/mysouvenir'
+				})
+		else:
+			request.user.userprofile.credits -= 10
 		
-
 		text = request.POST.get('text')
 		user_to_id = request.POST.get('user-to')
-
-		print('hahaha', user_to_id)
 
 		if user_to_id is None:
 			user_to = request.user

@@ -96,6 +96,7 @@ def register(request):
 		sendEmail(email, token)
 
 		user_profile = UserProfile.objects.create(user=user)
+		user_profile.portrait.url = '/media/photos/portrait/avatar.jpg'
 		user_profile.save()
 
 		return render_to_response('message.html', 
@@ -408,7 +409,8 @@ def getRecoFriends(user):
 
 	#temp = {}.fromkeys(temp_users).keys()
 	temp = set(temp_users) - set(getMyHeros(user))
-	temp.remove(user)
+	if user in temp:
+		temp.remove(user)
 
 	for t in temp:
 		reco_users[t] = temp_users.count(t)
@@ -593,7 +595,7 @@ def resendEmail(request):
 def sendEmail(email_to, token):
 	#Sign In  
 	subject = 'Time Traveler 账户激活'  
-	text = '<a href="http://localhost:8000/user/confirmemail?token='+ str(token) +'">请点此激活您在TimeTraveler的邮箱</a>'
+	text = '<a href="' + WEBSITE_URL_BASE +'/user/confirmemail?token='+ str(token) +'">请点此激活您在TimeTraveler的邮箱</a>'
 
 	# msg = MIMEText(text,'plain','utf-8')#中文需参数‘utf-8’，单字节字符不需要
 	msg = MIMEText(text,_subtype='html',_charset='gb2312')  

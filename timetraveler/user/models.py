@@ -8,6 +8,7 @@ class UserProfile(models.Model):
 	gender = models.BooleanField(default=False)
 	portrait = models.FileField(upload_to='portrait')
 	signature = models.CharField(max_length=200)
+	credits = models.IntegerField(default=0)
 
 	def __unicode__(self):
 		return self.user.username

@@ -28,7 +28,7 @@
 			<p class="mcard-name">{{ user.username }}</p>
 			<hr class="mcard-hr">
 			<p class="signature-style">{{ user.email }}</p>
-			<p class="signature-style">{{ user.date_joined|date:"Y-m-d" }}加入</p>
+			<p class="signature-style">{{ user.date_joined|date:"Y-m-d" }}加入 {% if me.id == user.id %}&nbsp;&nbsp;&nbsp; 积分:{{ user.userprofile.credits }}{% endif %}</p>
 			<hr class="mcard-hr">
 			<p class="signature-style" id="signature-text">
 			{% if user.userprofile.signature != "" %}
