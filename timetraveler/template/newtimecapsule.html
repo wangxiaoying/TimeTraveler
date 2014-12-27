@@ -23,43 +23,46 @@
 		<form role="form" method="POST" enctype="multipart/form-data" action="/timecapsule/create">
 			{% csrf_token %}
 			<h2>创建我的时间囊</h2>
-			<div class="form-group">
-				<textarea name="text" class="form-control" rows="5" placeholder="我想对那时的我说~" require="true"></textarea>
+			<div class="form-group mtm">
+				<textarea name="text" class="form-control" rows="5" placeholder="我想对那时的你说~" require="true"></textarea>
 			</div>
-			<div class="form-group">
+			<div class="form-group mtm">
 				<span class="file-input btn btn-info btn-file">
 					<input type="file" name="capsule" require="true"/>
 					选取图片<span></span></span>	
 				</div>
-				<div class="form-group text-center">
-					<label for="dtp_input1" class="col-md-2 control-label">设置时间</label>
-					<div class="input-group date form_datetime col-md-7" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+				<div class="form-group text-center mtm">
+					<label for="dtp_input1" class="col-md-2 control-label pln">设置时间</label>
+					<div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
 						<input class="form-control" size="16" type="text" value="" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 					</div>
 					<input type="hidden" id="dtp_input1" value="" name="date-to"/><br/>
 				</div>
-				<div class="form-group">
+				<div class="form-group mtm">
+					<label class="control-label pln">接受者</label>
 					<div class="row">
 						<div class="col-md-2">
-							<label >接受者</label>
-							<img src="/media/photos/portrait/avatar.jpg" id="rp_img" class="img-rounded" height="50" width="50" alt="..."/>
-							<label id="rp_name">用户名</label>
+							<img src="/media/photos/portrait/avatar.jpg" id="rp_img" class="img-rounded" width="100%" alt="..."/>
 						</div>
 						<div class="col-md-10">
-							<a class="btn btn-default btn-primary" id="btn-choose-friend" onclick="to_someone(1)" data-toggle="modal" data-target="#rp-list">从朋友里选择</a>
-							<a class="btn btn-default btn-primary" id="btn-choose-myself" onclick="choose_rp({{ me.id }})">给自己</a><hr/>
-							<div>
+							<div class="input-group">
 								<input id="search-rp" type="text" class="form-control" placeholder="请输入用户名或邮箱"/>
-								<a class="btn btn-default btn-primary" onclick="to_someone(0)">搜索</a>
+								<span class="input-group-btn">
+									<a class="btn btn-primary" onclick="to_someone(0)">搜索</a>
+								</span>
+							</div>
+							<div style="text-align:right" class="mtm">
+								<a class="pls cursor-ptr" id="btn-choose-friend" onclick="to_someone(1)" data-toggle="modal" data-target="#rp-list">从朋友里选择</a>
+								<a class="pls cursor-ptr" id="btn-choose-myself" onclick="choose_rp({{ me.id }})">给自己</a><hr/>
 							</div>
 						</div>
 					</div>
 					<input type="hidden" name="user-to" value="" id="user_to_id" require="true"/>
 				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-primary">创建</button></br>
+				<div class="form-group mtm">
+					<button type="submit" class="btn btn-primary newcap-btn">创建</button></br>
 				</div>
 			</form>
 		</div>

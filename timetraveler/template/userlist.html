@@ -10,37 +10,46 @@
 
 {% block body %}
 <body>
-{% endblock %}
+	{% endblock %}
 
-{% block content %}
+	{% block content %}
 
-<div class="row">
-	<div class="col-md-8 col-md-offset-2">
-		<div>
-			{% if users %}
-			<div class="list-group">
-				{% for u in users %}
-				<div class="list-group-item">
-					{% if u.userprofile.portrait.name != "" %}
-					<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
-					{% else %}
-					<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
-					{% endif %}&nbsp;&nbsp;
-					<a href="/event/homepage?user_id={{ u.id }}">{{ u.username }}</a>&nbsp;&nbsp;&nbsp;
-					{% if u.userprofile.signature != "" %}
-					<span>{{ u.userprofile.signature }}</span>
-					{% else %}		
-					<span>TA很懒，什么都没有写</span>		
-					{% endif %}
-					<span class="text-muted" style="float:right">{{ u.date_joined|date:"Y-m-d" }}加入</span>
-				</div>
-				{% endfor %}
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div>
+				{% if users %}
+				<div class="panel panel-default">
+					{% for u in users %}
+					<div class="panel-body">
+						<div class="col-md-1">
+							{% if u.userprofile.portrait.name != "" %}
+							<img src="/media/{{ u.userprofile.portrait.url}}" class="img-rounded" height="50" width="50" alt="..."/>
+							{% else %}
+							<img src="/media/photos/portrait/avatar.jpg" class="img-rounded" height="50" width="50" alt="..."/>
+							{% endif %}
+						</div>
+						<div class="col-md-4 event-title">
+							<p class="mbn mts"><a href="/event/homepage?user_id={{ u.id }}">{{ u.username }}</a></p>
+							<p class="mbn">
+								{% if u.userprofile.signature != "" %}
+								<span>{{ u.userprofile.signature }}</span>
+								{% else %}		
+								<span>TA很懒，什么都没有写</span>		
+								{% endif %}
+							</p>
+						</div>
+						<!-- TODO -->
+						<div class="col-md-6">
+							<p class="mbn mtl">{{ u.email }}</a></p>
+						</div> 
+					</div>
+					{% endfor %}
+				
+				{% else %}
+				<h3>没有搜到任何用户</h3>
+				{% endif %}
 			</div>
-			{% else %}
-			<h3>没有搜到任何用户</h3>
-			{% endif %}
 		</div>
 	</div>
-</div>
 
-{% endblock %}
+	{% endblock %}

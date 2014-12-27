@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/media/resources/css/showtimecapsule.css">
+{% endblock %}
+
 {% block body %}
 <body>
 {% endblock %}
@@ -7,12 +11,18 @@
 {% block content %}
 
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<h2>{{ capsule.user_from.username }}送给你的时间囊</h2>
-			<h5>埋下日期：{{ capsule.time_start|date:"Y年m月d日" }}</h5>
-			<h5>挖出日期：{{ capsule.time_end|date:"Y年m月d日" }}</h5>
-			<img src="/media/{{ capsule.image.url }}" style="width:300px; height=300px" alt="..."/>
-			<h4>{{ capsule.text }}</h4>
+		<div class="col-md-2">
+			<div class="postit">
+	    		<div class="postit_img">
+	    	  		<div class="postit_text">{{ capsule.text }}</div>
+	   			</div>
+	   		</div>
+	   	</div>	
+		<div class="col-md-8">
+			<div style="text-align:right">
+				<h5 class="mtm">于{{ capsule.time_start|date:"Y年m月d日" }}由{{ capsule.user_from.username }}埋下 | {{ capsule.time_end|date:"Y年m月d日" }}挖出</h5>
+			</div>
+			<img src="/media/{{ capsule.image.url }}" style="width:100%; height:auto" alt="..."/>
 		</div>
 	</div>
 

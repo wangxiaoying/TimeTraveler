@@ -55,6 +55,8 @@ def createEvent(request):
 		request.user.userprofile.credits += 10
 		request.user.userprofile.save()
 
+		return HttpResponseRedirect('/event/myspace')
+
 		return render_to_response('message.html',
 			{
 				'message': '上传成功',

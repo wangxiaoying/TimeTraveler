@@ -61,11 +61,13 @@ def createTimeCapsule(request):
 		new_timecapsule = TimeCapsule(user_from=user_from, user_to=user_to, text=text, image=image_file, time_end=date_to)
 		new_timecapsule.save()
 
-		return render_to_response('message.html',
-			{
-				'message': '上传成功',
-				'url': '/timecapsule/mysouvenir'
-			})
+
+		return HttpResponseRedirect('/timecapsule/mysouvenir')
+		# return render_to_response('message.html',
+		# 	{
+		# 		'message': '上传成功',
+		# 		'url': '/timecapsule/mysouvenir'
+		# 	})
 
 
 	except Exception as e:

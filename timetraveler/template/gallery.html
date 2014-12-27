@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="/media/resources/css/gallery.css">
 {% endblock %}
 
 
@@ -15,13 +16,46 @@
 
 	<div class="row">
 		{% if photos %}
-		{% for photo in photos %}
-		<a href="/event/show?id={{ photo.id }}"><div class="col-md-3 col-md-offset-1 thumbnail" style="text-align:center">
-			<img src="/media/{{ photo.url }}" style="width:300px; height=300px" alt="..." class="img-thumbnail">
-		</div></a>
-		{% endfor %}
+			<div class="col-md-4">
+				{% for photo in photos %}
+					{% if forloop.counter0|divisibleby:3 %}
+					<a href="/event/show?id={{ photo.id }}" class="gallery-image-anchor">
+						<div class="thumbnail text-align" class="gallery-image-wrap">
+							<img src="/media/{{ photo.url }}" alt="..." class="gallery-image">
+						</div>
+					</a>
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="col-md-4">
+				{% for photo in photos %}
+					{% if forloop.counter0|divisibleby:3 %}
+					{% elif forloop.counter0|divisibleby:2 %}
+					<a href="/event/show?id={{ photo.id }}" class="gallery-image-anchor">
+						<div class="thumbnail text-align" class="gallery-image-wrap">
+							<img src="/media/{{ photo.url }}" alt="..." class="gallery-image">
+						</div>
+					</a>
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="col-md-4">
+				{% for photo in photos %}
+					{% if forloop.counter0|divisibleby:3 %}
+					{% elif forloop.counter0|divisibleby:2 %}
+					{% else %}
+					<a href="/event/show?id={{ photo.id }}" class="gallery-image-anchor">
+						<div class="thumbnail text-align" class="gallery-image-wrap">
+							<img src="/media/{{ photo.url }}" alt="..." class="gallery-image">
+						</div>
+					</a>
+					{% endif %}
+				{% endfor %}
+			</div>
+
+		
 		{% else %}
-		<h2>{{ message }}</h2>
+			<h2>{{ message }}</h2>
 		{% endif %}
 	</div>
 
