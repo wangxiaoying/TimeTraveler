@@ -4,6 +4,11 @@ body {
 	background-color: #eee;
 	font-size: 12px;
 	font-family: 'Microsoft YaHei', Arial, 'Lucida Grande', Tahoma, sans-serif;
+	background-image: url(/media/resources/css/images/bg.png);
+	background-position: left 0px;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-color: #C0DEED;
 }
 
 body .myform{

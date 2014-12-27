@@ -1,4 +1,4 @@
-.navbar-inverse { background-color: #6790D6; border-radius: 0}
+.navbar-inverse { background-color: #6790D6; border-radius: 0;}
 .navbar-inverse .navbar-nav>.active>a:hover,.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus { background-color: #428BCA}
 .navbar-inverse .navbar-nav>.active>a,.navbar-inverse .navbar-nav>.open>a,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus { background-color: #46499E}
 .dropdown-menu { background-color: #ffffff; border-color: #6790D6; border-width: 2px;}
@@ -20,7 +20,11 @@
 .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #ffffff}
 
 body {
-	background-color: #e9eaed;
+background-image: url(/media/resources/css/images/bg.png);
+background-position: left 0px;
+background-attachment: fixed;
+background-repeat: no-repeat;
+background-color: #C0DEED;
 }
 
 .text-muted {
