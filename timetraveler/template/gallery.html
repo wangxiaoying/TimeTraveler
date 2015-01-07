@@ -31,6 +31,7 @@
 				{% for photo in photos %}
 					{% if forloop.counter0|divisibleby:3 %}
 					{% elif forloop.counter0|divisibleby:2 %}
+					{% else %}
 					<a href="/event/show?id={{ photo.id }}" class="gallery-image-anchor">
 						<div class="thumbnail text-align" class="gallery-image-wrap">
 							<img src="/media/{{ photo.url }}" alt="..." class="gallery-image">
@@ -43,7 +44,6 @@
 				{% for photo in photos %}
 					{% if forloop.counter0|divisibleby:3 %}
 					{% elif forloop.counter0|divisibleby:2 %}
-					{% else %}
 					<a href="/event/show?id={{ photo.id }}" class="gallery-image-anchor">
 						<div class="thumbnail text-align" class="gallery-image-wrap">
 							<img src="/media/{{ photo.url }}" alt="..." class="gallery-image">
@@ -52,7 +52,6 @@
 					{% endif %}
 				{% endfor %}
 			</div>
-
 		
 		{% else %}
 			<h2>{{ message }}</h2>
